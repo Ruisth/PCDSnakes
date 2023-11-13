@@ -56,7 +56,7 @@ public abstract class Board extends Observable {
 				getCell(pos).setGameElement(gameElement);
 				if(gameElement instanceof Goal) {
 					setGoalPosition(pos);
-//					System.out.println("Goal placed at:"+pos);
+					System.out.println("Goal placed at:"+pos);
 				}
 				placed=true;
 			}

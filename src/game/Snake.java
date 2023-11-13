@@ -41,10 +41,15 @@ public abstract class Snake extends Thread implements Serializable{
 	public LinkedList<Cell> getCells() {
 		return cells;
 	}
+
+
 	protected void move(Cell cell) throws InterruptedException {
 		// TODO
+
 	}
 	
+
+
 	public LinkedList<BoardPosition> getPath() {
 		LinkedList<BoardPosition> coordinates = new LinkedList<BoardPosition>();
 		for (Cell cell : cells) {
