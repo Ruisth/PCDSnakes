@@ -38,7 +38,7 @@ public class LocalBoard extends Board{
 		addObstacles( NUM_OBSTACLES);
 		
 		Goal goal=addGoal();
-//		System.err.println("All elements placed");
+		System.err.println("All elements placed");
 	}
 
 	public void init() {
