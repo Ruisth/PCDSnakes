@@ -42,9 +42,9 @@ public abstract class Snake extends Thread implements Serializable{
 		return cells;
 	}
 
-
+	//Criação da movimentação das snakes
 	protected void move(Cell cell) throws InterruptedException {
-		// TODO
+		// TODO criar a movimentação das snakes
 
 	}
 	
@@ -78,6 +78,7 @@ public abstract class Snake extends Thread implements Serializable{
 	public Board getBoard() {
 		return board;
 	}
-	
+
+
 	
 }
