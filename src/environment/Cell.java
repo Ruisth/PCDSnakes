@@ -39,8 +39,10 @@ public class Cell {
 		ocuppyingSnake=snake;
 	}
 
-	public void release() {
-		//TODO
+	public void release()
+			throws InterruptedException {
+				//TODO coordination and mutual exclusion
+			ocuppyingSnake=null;
 	}
 
 	public boolean isOcupiedBySnake() {
@@ -68,6 +70,8 @@ public class Cell {
 		// TODO
 		return null;
 	}
+
+
 	public void removeObstacle() {
 	//TODO
 	}

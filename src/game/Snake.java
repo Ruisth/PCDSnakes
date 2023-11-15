@@ -24,11 +24,13 @@ public abstract class Snake extends Thread implements Serializable{
 	protected int size = 5;
 	private int id;
 	private Board board;
-	
+
 	public Snake(int id,Board board) {
 		this.id = id;
 		this.board=board;
 	}
+
+	public abstract Snake createSnakeInstance(Board board);
 
 	public int getSize() {
 		return size;
@@ -41,7 +43,7 @@ public abstract class Snake extends Thread implements Serializable{
 	public int getLength() {
 		return cells.size();
 	}
-	
+
 	public LinkedList<Cell> getCells() {
 		return cells;
 	}
@@ -74,7 +76,6 @@ public abstract class Snake extends Thread implements Serializable{
 		return new BoardPosition(newX, newY);
 
 	}
-	
 
 
 	public LinkedList<BoardPosition> getPath() {
@@ -84,14 +85,15 @@ public abstract class Snake extends Thread implements Serializable{
 		}
 
 		return coordinates;
-	}	
+	}
+
 	protected void doInitialPositioning() {
 		// Random position on the first column. 
 		// At startup, snake occupies a single cell
 		int posX = 0;
 		int posY = (int) (Math.random() * Board.NUM_ROWS);
 		BoardPosition at = new BoardPosition(posX, posY);
-		
+
 		try {
 			board.getCell(at).request(this);
 		} catch (InterruptedException e1) {
@@ -99,13 +101,56 @@ public abstract class Snake extends Thread implements Serializable{
 			e1.printStackTrace();
 		}
 		cells.add(board.getCell(at));
-		System.err.println("Snake "+getIdentification()+" starting at:"+getCells().getLast());		
+		System.err.println("Snake "+getIdentification()+" starting at:"+getCells().getLast());
 	}
-	
+
 	public Board getBoard() {
 		return board;
 	}
 
 
-	
+	// Method to set the snake's position to a random location
+	private void setSnakeRandomPosition(Snake snake) throws InterruptedException {
+		// Clear the current cells occupied by the snake
+		for (int i = 0; i < snake.getLength(); i++) {
+			try {
+				snake.getCells().get(i).release();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// Generate a new random position
+		BoardPosition newPosition = getNewPosition();
+
+		//try {
+			// Request the cells at the new position for the snake
+			for (int i = 0; i < snake.getLength(); i++) {
+				//if (isValid(newPosition)) {
+					//if (i == 0) {
+						board.getCell(newPosition).request(snake);
+						//cells.add(snake.getCells().get(i));
+					//} else {
+						//cells.add(snake.getCells().get(i));
+					//}
+				//}
+			}
+		//} catch (InterruptedException e) {
+		//	e.printStackTrace();
+		//}
+
+		// Update the GUI to reflect the new snake positions
+		board.setChanged();
+	}
+
+	// Method to reset snake positions
+	public void resetSnakePositions() throws InterruptedException {
+		for (Snake snake : board.getSnakes()) {
+			// Call the method to set the snake's position to a random location
+			setSnakeRandomPosition(snake);
+			board.setChanged();
+		}
+	}
+
+
 }

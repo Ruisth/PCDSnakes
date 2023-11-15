@@ -36,9 +36,14 @@ public class AutomaticSnake extends Snake {
 				randomMove();
 			} catch (InterruptedException e) {
 				System.out.println(currentThread() + ": " + e.toString());
-            }
+			}
 
-        }
+		}
+	}
+
+	@Override
+	public Snake createSnakeInstance(Board board) {
+		return new AutomaticSnake(getIdentification(), (LocalBoard) board);
 	}
 
 	public void randomMove() {
@@ -69,15 +74,19 @@ public class AutomaticSnake extends Snake {
 
 			//isValid
 			if (isValid(newCell.getPosition())) {
-				newCell.request(this);
-				//Move the snake to the new cell
-				cells.addFirst(newCell);
+				if (newDistanceGoal <= oldDistanceGoal) {
+					newCell.request(this);
+					//Move the snake to the new cell
+					cells.addFirst(newCell);
 
-				//Remove the last cell if snake exceeds its size
-				if (cells.size() > size) {
-					Cell tail = cells.removeLast();
-					tail.release();
+					//Remove the last cell if snake exceeds its size
+					if (cells.size() > size) {
+						Cell tail = cells.removeLast();
+						tail.release();
+					}
 				}
+
+				//resetSnakePositions();
 			}
 
 			//Notify the GUI to change snake position

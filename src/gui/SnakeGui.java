@@ -14,6 +14,9 @@ import javax.swing.JFrame;
 
 import environment.Board;
 import environment.LocalBoard;
+import game.AutomaticSnake;
+import game.Snake;
+import environment.BoardPosition;
 /**
  *  Class to create and configure GUI.
  *  Only the listener to the button should be edited, see TODO below.
@@ -51,6 +54,15 @@ public class SnakeGui implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO
+				for (Snake snake : board.getSnakes()){
+					Snake concreteSnake = snake.createSnakeInstance(board);
+					try {
+						concreteSnake.resetSnakePositions();
+					} catch (InterruptedException ex) {
+						throw new RuntimeException(ex);
+					}
+					board.setChanged();
+				}
 			}
 				
 		});
@@ -60,6 +72,9 @@ public class SnakeGui implements Observer {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+
+
 
 	public void init() {
 		frame.setVisible(true);
