@@ -24,7 +24,7 @@ public class BoardPosition {
 	@Override
 	public boolean equals(Object obj) {
 		BoardPosition other = (BoardPosition) obj;
-		return other.x==x && other.y == y;
+		return other.x == x && other.y == y;
 	}
 	
 	public double distanceTo(BoardPosition other) {
