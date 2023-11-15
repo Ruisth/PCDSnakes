@@ -15,7 +15,7 @@ import game.AutomaticSnake;
  *
  */
 public class Cell {
-	private BoardPosition position;
+	private final BoardPosition position;
 	private Snake ocuppyingSnake = null;
 	private GameElement gameElement=null;
 	
@@ -81,7 +81,9 @@ public class Cell {
 	public boolean isOcupiedByGoal() {
 		return (gameElement!=null && gameElement instanceof Goal);
 	}
-	
-	
+
+	public boolean isEqual(Cell newCell) {
+        return this.position.x == newCell.position.x && this.position.y == newCell.position.y;
+    }
 
 }

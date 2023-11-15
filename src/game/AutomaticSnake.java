@@ -11,6 +11,8 @@ import environment.Cell;
 import environment.Board;
 import environment.BoardPosition;
 
+import static environment.BoardPosition.isValid;
+
 public class AutomaticSnake extends Snake {
 	public AutomaticSnake(int id, LocalBoard board) {
 		super(id,board);
@@ -46,40 +48,32 @@ public class AutomaticSnake extends Snake {
 			Board board = getBoard();
 
 			// Get available directions
-			LinkedList<BoardPosition> availableDirections = new LinkedList<>();
-			availableDirections.add(new BoardPosition(0, -1)); // Up
-			availableDirections.add(new BoardPosition(0, 1));  // Down
-			availableDirections.add(new BoardPosition(-1, 0)); // Left
-			availableDirections.add(new BoardPosition(1, 0));  // Right
+			List<BoardPosition> availableDirections = board.getNeighboringPositions(head);
 
 			//Get the possible random direction
 			int randomIndex = (int) (Math.random() * availableDirections.size());
-			BoardPosition direction =availableDirections.get(randomIndex);
-
-			//Calculate the new position based on the random direction
-			BoardPosition newPosition = new BoardPosition(
-					head.getPosition().getX() + direction.getX(),
-					head.getPosition().getY() + direction.getY());
+			Cell newCell = new Cell(availableDirections.get(randomIndex));
 
 
-			//Request the new cell
-			if (newPosition.getX() >= 0 && newPosition.getX() < Board.NUM_COLUMNS
-					&& newPosition.getY() >= 0 && newPosition.getY() < Board.NUM_COLUMNS
-					&& newPosition != head.getPosition()) {
+			//Check if the new position is occupied by the snake
+			for (Cell cell : cells) {
+				if (cell.isEqual(newCell)) {
+					return;
+				}
+			}
 
-
-				board.getCell(newPosition).request(this);
+			//isValid
+			if (isValid(newCell.getPosition())) {
+				newCell.request(this);
 				//Move the snake to the new cell
-				cells.addFirst(board.getCell(newPosition));
+				cells.addFirst(newCell);
 
+				//Remove the last cell if snake exceeds its size
 				if (cells.size() > size) {
 					Cell tail = cells.removeLast();
 					tail.release();
 				}
 			}
-
-			//Remove the last cell if snake exceeds its size
-
 
 			//Notify the GUI to change snake position
 			board.setChanged();
@@ -89,7 +83,11 @@ public class AutomaticSnake extends Snake {
 			e.printStackTrace();
 		}
 	}
-	
 
-	
+	public boolean isHumanPlayer() {
+		return false;
+	}
+
+
+
 }

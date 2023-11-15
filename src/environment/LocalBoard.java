@@ -8,12 +8,7 @@ import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import game.GameElement;
-import game.Goal;
-import game.Obstacle;
-import game.Server;
-import game.Snake;
-import game.AutomaticSnake;
+import game.*;
 
 /** Class representing the state of a game running locally
  * 
@@ -59,9 +54,5 @@ public class LocalBoard extends Board{
 	public void handleKeyRelease() {
 		// do nothing... No keys relevant in local game
 	}
-
-
-
-
 
 }

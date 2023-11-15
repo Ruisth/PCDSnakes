@@ -8,6 +8,10 @@ import gui.SnakeGui;
 import environment.Board;
 import environment.BoardPosition;
 import environment.Cell;
+
+import static environment.BoardPosition.isValid;
+
+
 /** Base class for representing Snakes.
  * Will be extended by HumanSnake and AutomaticSnake.
  * Common methods will be defined here.
@@ -44,7 +48,30 @@ public abstract class Snake extends Thread implements Serializable{
 
 	//Criação da movimentação das snakes
 	protected void move(Cell cell) throws InterruptedException {
-		// TODO criar a movimentação das snakes
+		// Check if the new position is valid and available
+		if (isValid(cell.getPosition())) {
+			// Move the snake to the new cell
+			cells.addFirst(cell);
+			if (cells.size() > size) {
+				// Remove the tail cell if the snake exceeds its size limit
+				Cell tail = cells.removeLast();
+				tail.release();
+			}
+		}
+		// Update the GUI to reflect the snake's new position
+		board.setChanged();
+	}
+
+	private boolean isHumanPlayer() {
+		return true;
+	}
+
+	public BoardPosition getNewPosition() {
+		// Generate a random position
+		int newX = (int) (Math.random() * Board.NUM_COLUMNS);
+		int newY = (int) (Math.random() * Board.NUM_ROWS);
+
+		return new BoardPosition(newX, newY);
 
 	}
 	
