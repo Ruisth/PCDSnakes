@@ -6,11 +6,13 @@ version: "1.0"
 
 #Specify inspection profile for code analysis
 profile:
-  name: qodana.starter
+  name: qodana.recommended
 
 #Enable inspections
 include:
-  - name: <SomeEnabledInspectionId>
+  - name: CheckDependencyLicenses
+  - name: VulnerableLibrariesGlobal
+  - name: SomeInspectionId
 
 #Disable inspections
 #exclude:
@@ -21,7 +23,7 @@ include:
 projectJDK: 21 #(Applied in CI/CD pipeline)
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
-bootstrap: sh ./prepare-qodana.sh
+#bootstrap: sh ./prepare-qodana.sh
 
 #Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
 #plugins:
