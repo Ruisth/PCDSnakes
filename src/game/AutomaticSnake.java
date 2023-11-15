@@ -54,6 +54,11 @@ public class AutomaticSnake extends Snake {
 			int randomIndex = (int) (Math.random() * availableDirections.size());
 			Cell newCell = new Cell(availableDirections.get(randomIndex));
 
+			double oldDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
+			double newDistanceGoal = newCell.getPosition().distanceTo(board.getGoalPosition());
+			//System.out.println(oldDistanceGoal);
+			//System.out.println(newDistanceGoal);
+
 
 			//Check if the new position is occupied by the snake
 			for (Cell cell : cells) {

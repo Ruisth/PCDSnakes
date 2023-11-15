@@ -25,7 +25,7 @@ public class Goal extends GameElement  {
 		}
 	}
 
-	public int captureGoal() throws InterruptedException {
+	/*public int captureGoal() throws InterruptedException {
 		// Increment the goal's value
 		incrementValue();
 		// Check if the goal's value has reached the maximum value
@@ -39,5 +39,5 @@ public class Goal extends GameElement  {
 		goalPosition = board.randomPosition();
 
 		return -1;
-	}
+	}*/
 }
