@@ -14,32 +14,28 @@ import environment.BoardPosition;
 import static environment.BoardPosition.isValid;
 
 public class AutomaticSnake extends Snake {
+
+	private boolean state = false;
 	public AutomaticSnake(int id, LocalBoard board) {
 		super(id,board);
 
 	}
 
-	/*@Override
+	@Override
 	public void run() {
 		doInitialPositioning();
+		state = true;
 		System.err.println("initial size:"+cells.size());
-		try {
-			cells.getLast().request(this);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		//TODO: automatic movement
-		for (int i = 0; i < 100; i++){
+		while(state){
 			try{
 				sleep(Board.PLAYER_PLAY_INTERVAL*10);
 				randomMove();
 			} catch (InterruptedException e) {
 				System.out.println(currentThread() + ": " + e.toString());
 			}
-
 		}
-	}*/
+	}
 
 	@Override
 	public Snake createSnakeInstance(Board board) {
@@ -62,9 +58,8 @@ public class AutomaticSnake extends Snake {
 			//Compare the distances between old and new position of the snake
 			double oldDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
 			double newDistanceGoal = newCell.getPosition().distanceTo(board.getGoalPosition());
-			//System.out.println(oldDistanceGoal);
-			//System.out.println(newDistanceGoal);
-
+			System.out.println("Snake " + getIdentification() + " old distance to goal : " + oldDistanceGoal);
+			System.out.println("Snake " + getIdentification() + " new distance to goal : " + newDistanceGoal);
 
 			//Check if the new position is occupied by the snake
 			for (Cell cell : cells) {
@@ -72,7 +67,6 @@ public class AutomaticSnake extends Snake {
 					return;
 				}
 			}
-
 			//isValid
 			if (isValid(newCell.getPosition())) {
 				if (newDistanceGoal <= oldDistanceGoal) {
@@ -86,13 +80,11 @@ public class AutomaticSnake extends Snake {
 						tail.release();
 					}
 				}
-
-				//resetSnakePositions();
 			}
 
 			//Notify the GUI to change snake position
-			//board.setChanged();
-			System.out.println("Snake " + getIdentification() + " moved to: " + getCells().getFirst());
+			board.setChanged();
+			System.out.println("Snake " + getIdentification() + " moved to: [" + getCells().getFirst().getPosition().x + "," + getCells().getFirst().getPosition().y + "]");
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
