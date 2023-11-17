@@ -61,7 +61,7 @@ public class SnakeGui implements Observer {
 					Cell headPosition = snake.getCells().getFirst();
 					// Get neighboring positions
 					List<BoardPosition> neighboringPositions = board.getNeighboringPositions(headPosition);
-					// Choose a random neighboring position (you can implement your own logic here)
+					// Choose a random neighboring position
 					int randomIndex = (int) (Math.random() * neighboringPositions.size());
 					BoardPosition boardPosition = neighboringPositions.get(randomIndex);
 					// Retrieve the corresponding Cell object for the chosen BoardPosition
