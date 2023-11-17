@@ -1,6 +1,9 @@
 package environment;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.sound.midi.SysexMessage;
 
@@ -18,7 +21,7 @@ public class Cell {
 	private final BoardPosition position;
 	private Snake ocuppyingSnake = null;
 	private GameElement gameElement=null;
-	
+	public Lock lock = new ReentrantLock();
 	public GameElement getGameElement() {
 		return gameElement;
 	}

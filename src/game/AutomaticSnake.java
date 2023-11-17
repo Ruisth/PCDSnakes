@@ -43,10 +43,14 @@ public class AutomaticSnake extends Snake {
 		try {
 			// Get the current head cell of the snake
 			Cell head = cells.getFirst();
+			//head.lock.lock();
 			Board board = getBoard();
 
 			// Get available directions
 			List<BoardPosition> availableDirections = board.getNeighboringPositions(head);
+
+			// Fazer a lista dos obstaculos
+			List<Obstacle> obstacles = board.getObstacles();
 
 			//Get the possible random direction
 			int randomIndex = (int) (Math.random() * availableDirections.size());
