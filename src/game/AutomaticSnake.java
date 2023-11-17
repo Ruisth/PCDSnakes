@@ -19,7 +19,7 @@ public class AutomaticSnake extends Snake {
 
 	}
 
-	@Override
+	/*@Override
 	public void run() {
 		doInitialPositioning();
 		System.err.println("initial size:"+cells.size());
@@ -39,7 +39,7 @@ public class AutomaticSnake extends Snake {
 			}
 
 		}
-	}
+	}*/
 
 	@Override
 	public Snake createSnakeInstance(Board board) {
@@ -91,7 +91,7 @@ public class AutomaticSnake extends Snake {
 			}
 
 			//Notify the GUI to change snake position
-			board.setChanged();
+			//board.setChanged();
 			System.out.println("Snake " + getIdentification() + " moved to: " + getCells().getFirst());
 
 		} catch (InterruptedException e) {
@@ -99,7 +99,7 @@ public class AutomaticSnake extends Snake {
 		}
 	}
 
-	public boolean isHumanPlayer() {
+	public boolean isHumanSnake() {
 		return false;
 	}
 

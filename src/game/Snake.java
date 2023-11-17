@@ -2,6 +2,7 @@ package game;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.List;
 
 import environment.LocalBoard;
 import gui.SnakeGui;
@@ -32,6 +33,45 @@ public abstract class Snake extends Thread implements Serializable{
 
 	public abstract Snake createSnakeInstance(Board board);
 
+	@Override
+	public void run() {
+		//Iniciar a posição da cobra
+		doInitialPositioning();
+		System.err.println("initial size:"+cells.size());
+		try {
+			while (true) {
+				sleep(Board.PLAYER_PLAY_INTERVAL*10);
+				cells.getLast().request(this);
+				if(!isHumanSnake()) {
+					//fazer uma direção random e chamar a função move()
+
+					Cell head = cells.getFirst();
+					// Get available directions
+					List<BoardPosition> availableDirections = board.getNeighboringPositions(head);
+
+					//Get the possible random direction
+					int randomIndex = (int) (Math.random() * availableDirections.size());
+					Cell newCell = new Cell(availableDirections.get(randomIndex));
+
+					//Compare the distances between old and new position of the snake
+					double oldDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
+					double newDistanceGoal = newCell.getPosition().distanceTo(board.getGoalPosition());
+
+					if (newDistanceGoal <= oldDistanceGoal) {
+						move(newCell);
+					}
+
+				} else {
+					//receber input do teclado e chamar a função move() com esse input
+				}
+			}
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+	public abstract boolean isHumanSnake();
+
 	public int getSize() {
 		return size;
 	}
@@ -49,11 +89,18 @@ public abstract class Snake extends Thread implements Serializable{
 	}
 
 	//Criação da movimentação das snakes
-	protected void move(Cell cell) throws InterruptedException {
+	protected void move(Cell newCell) throws InterruptedException {
 		// Check if the new position is valid and available
-		if (isValid(cell.getPosition())) {
+		if (isValid(newCell.getPosition())) {
+			//Check if the new position is occupied by the snake
+			for (Cell cell : cells) {
+				if (cell.isEqual(newCell)) {
+					return;
+				}
+			}
+			newCell.request(this);
 			// Move the snake to the new cell
-			cells.addFirst(cell);
+			cells.addFirst(newCell);
 			if (cells.size() > size) {
 				// Remove the tail cell if the snake exceeds its size limit
 				Cell tail = cells.removeLast();
@@ -62,10 +109,6 @@ public abstract class Snake extends Thread implements Serializable{
 		}
 		// Update the GUI to reflect the snake's new position
 		board.setChanged();
-	}
-
-	private boolean isHumanPlayer() {
-		return true;
 	}
 
 	public BoardPosition getNewPosition() {
@@ -111,33 +154,8 @@ public abstract class Snake extends Thread implements Serializable{
 
 	// Method to set the snake's position to a random location
 	private void setSnakeRandomPosition(Snake snake) throws InterruptedException {
-		// Clear the current cells occupied by the snake
-		for (int i = 0; i < snake.getLength(); i++) {
-			try {
-				snake.getCells().get(i).release();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 
-		// Generate a new random position
-		BoardPosition newPosition = getNewPosition();
-
-		//try {
-			// Request the cells at the new position for the snake
-			for (int i = 0; i < snake.getLength(); i++) {
-				//if (isValid(newPosition)) {
-					//if (i == 0) {
-						board.getCell(newPosition).request(snake);
-						//cells.add(snake.getCells().get(i));
-					//} else {
-						//cells.add(snake.getCells().get(i));
-					//}
-				//}
-			}
-		//} catch (InterruptedException e) {
-		//	e.printStackTrace();
-		//}
+		//fazer a mesma coisa do automatic move, para elas escolherem outra direção
 
 		// Update the GUI to reflect the new snake positions
 		board.setChanged();

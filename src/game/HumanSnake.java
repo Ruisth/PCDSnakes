@@ -12,4 +12,8 @@ public abstract class HumanSnake extends Snake {
 		super(id,board);
 	}
 
+	 public boolean isHumanSnake() {
+		 return true;
+	 }
+
 }
