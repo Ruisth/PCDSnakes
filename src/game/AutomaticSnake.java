@@ -16,6 +16,8 @@ import static environment.BoardPosition.isValid;
 public class AutomaticSnake extends Snake {
 
 	private boolean state = false;
+
+
 	public AutomaticSnake(int id, LocalBoard board) {
 		super(id,board);
 
@@ -37,11 +39,6 @@ public class AutomaticSnake extends Snake {
 		}
 	}
 
-	@Override
-	public Snake createSnakeInstance(Board board) {
-		return new AutomaticSnake(getIdentification(), (LocalBoard) board);
-	}
-
 	public void randomMove() {
 		try {
 			// Get the current head cell of the snake
@@ -61,16 +58,28 @@ public class AutomaticSnake extends Snake {
 			System.out.println("Snake " + getIdentification() + " old distance to goal : " + oldDistanceGoal);
 			System.out.println("Snake " + getIdentification() + " new distance to goal : " + newDistanceGoal);
 
-			//Check if the new position is occupied by the snake
-			for (Cell cell : cells) {
-				if (cell.isEqual(newCell)) {
-					return;
-				}
+
+			if (newCell.isOcupied()) {
+				return;
 			}
+
 			//isValid
 			if (isValid(newCell.getPosition())) {
+
 				if (newDistanceGoal <= oldDistanceGoal) {
 					newCell.request(this);
+
+
+					// Impede que as snakes se sobreponham
+					/*for (Snake snake : board.getSnakes()) {
+						for (int i = 0; i < snake.getCells().size(); i++) {
+							if (newCell.isEqual(snake.getCells().get(i))) {
+								System.err.println("EM CHOQUE!!!");
+								return;
+							}
+						}
+
+					}*/
 					//Move the snake to the new cell
 					cells.addFirst(newCell);
 
@@ -95,6 +104,13 @@ public class AutomaticSnake extends Snake {
 		return false;
 	}
 
+
+	/*private void checkMovement(){
+		for (Snake snake: getBoard().getSnakes()) {
+			if( snake.getCells().equals())
+
+		}
+	}*/
 
 
 }

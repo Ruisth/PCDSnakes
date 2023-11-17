@@ -88,7 +88,7 @@ public abstract class Board extends Observable {
 		return goal;
 	}
 
-	protected void addObstacles(int numberObstacles) {
+	public void addObstacles(int numberObstacles) {
 		// clear obstacle list , necessary when resetting obstacles.
 		getObstacles().clear();
 		while(numberObstacles>0) {

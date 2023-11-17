@@ -31,8 +31,6 @@ public abstract class Snake extends Thread implements Serializable{
 		this.board=board;
 	}
 
-	public abstract Snake createSnakeInstance(Board board);
-
 	@Override
 	public void run() {}
 

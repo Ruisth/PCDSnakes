@@ -36,13 +36,14 @@ public class Cell {
 	public void request(Snake snake)
 			throws InterruptedException {
 		//TODO coordination and mutual exclusion
-		ocuppyingSnake=snake;
+		ocuppyingSnake = snake;
+
 	}
 
 	public void release()
 			throws InterruptedException {
 				//TODO coordination and mutual exclusion
-			ocuppyingSnake=null;
+		ocuppyingSnake = null;
 	}
 
 	public boolean isOcupiedBySnake() {
@@ -52,7 +53,8 @@ public class Cell {
 
 	public  void setGameElement(GameElement element) {
 		// TODO coordination and mutual exclusion
-		gameElement=element;
+			gameElement = element;
+
 
 	}
 

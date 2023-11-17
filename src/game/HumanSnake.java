@@ -16,4 +16,5 @@ public abstract class HumanSnake extends Snake {
 		 return true;
 	 }
 
+
 }

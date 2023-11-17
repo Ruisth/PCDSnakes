@@ -1,6 +1,8 @@
 package game;
 
+import environment.BoardPosition;
 import environment.LocalBoard;
+import environment.Board;
 
 public class ObstacleMover extends Thread {
 	private Obstacle obstacle;
@@ -15,5 +17,10 @@ public class ObstacleMover extends Thread {
 	@Override
 	public void run() {
 		// TODO
+		/*int remainingMoves = obstacle.getRemainingMoves();
+		for (int i = 0; i < remainingMoves; i++){
+			Board.addObstacles(LocalBoard.NUM_OBSTACLES);
+			i--;
+		}*/
 	}
 }
