@@ -49,7 +49,7 @@ public class AutomaticSnake extends Snake {
 			// Get available directions
 			List<BoardPosition> availableDirections = board.getNeighboringPositions(head);
 			double oldDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
-			double newDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
+			double newDistanceGoal;
 			Cell newCell = null;
 
 			synchronized (this) {
