@@ -23,19 +23,23 @@ public class AutomaticSnake extends Snake {
 
 	}
 
+	Thread endGame =  new Thread() {
 	@Override
 	public void run() {
+		try {
 		doInitialPositioning();
 		state = true;
-		System.err.println("initial size:"+cells.size());
+		System.err.println("initial size:" + cells.size());
 		//TODO: automatic movement
-		while(state){
-			try{
-				sleep(Board.PLAYER_PLAY_INTERVAL*10);
+		while (state) {
+			try {
+				sleep(Board.PLAYER_PLAY_INTERVAL * 10);
 				randomMove();
 			} catch (InterruptedException e) {
 				System.out.println(currentThread() + ": " + e.toString());
 			}
+		}
+		}
 		}
 	}
 
@@ -45,7 +49,6 @@ public class AutomaticSnake extends Snake {
 			Cell head = cells.getFirst();
 			//head.lock.lock();
 			Board board = getBoard();
-
 			// Get available directions
 			List<BoardPosition> availableDirections = board.getNeighboringPositions(head);
 			double oldDistanceGoal = head.getPosition().distanceTo(board.getGoalPosition());
@@ -82,14 +85,4 @@ public class AutomaticSnake extends Snake {
 	public boolean isHumanSnake() {
 		return false;
 	}
-
-
-	/*private void checkMovement(){
-		for (Snake snake: getBoard().getSnakes()) {
-			if( snake.getCells().equals())
-
-		}
-	}*/
-
-
 }

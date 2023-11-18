@@ -72,7 +72,7 @@ public class Cell {
 
 
 	public  Goal removeGoal() {
-		// TODO
+		gameElement = null;
 		return null;
 	}
 

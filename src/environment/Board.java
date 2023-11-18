@@ -21,7 +21,7 @@ public abstract class Board extends Observable {
 	public static final int NUM_COLUMNS = 30;
 	public static final int NUM_ROWS = 30;
 	protected LinkedList<Snake> snakes = new LinkedList<Snake>();
-	private LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
+	protected LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
 	protected boolean isFinished;
 
 	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(1/*quando for apanhado o goal 9*/);
