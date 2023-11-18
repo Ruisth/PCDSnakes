@@ -15,7 +15,8 @@ import synchronization.FinishCountDownLatch;
 public abstract class Board extends Observable {
 	protected Cell[][] cells;
 	private BoardPosition goalPosition;
-	public static final long PLAYER_PLAY_INTERVAL = 100;
+	//private Goal goal; //não existia
+	public static final long PLAYER_PLAY_INTERVAL = 20;
 	public static final long REMOTE_REFRESH_INTERVAL = 200;
 	public static final int NUM_COLUMNS = 30;
 	public static final int NUM_ROWS = 30;
@@ -39,7 +40,7 @@ public abstract class Board extends Observable {
 		return cells[cellCoord.x][cellCoord.y];
 	}
 
-	protected BoardPosition getRandomPosition() {
+	public BoardPosition getRandomPosition() {
 		return new BoardPosition((int) (Math.random() *NUM_ROWS),(int) (Math.random() * NUM_ROWS));
 	}
 
@@ -82,7 +83,7 @@ public abstract class Board extends Observable {
 	}
 	
 
-	protected Goal addGoal() {
+	public Goal addGoal() {
 		Goal goal=new Goal(this);
 		addGameElement( goal);
 		return goal;
@@ -126,5 +127,14 @@ public abstract class Board extends Observable {
 		snakes.add(snake);
 	}
 
+	public void setGoalValue(int value) {
+		getCell(getGoalPosition()).getGoal().setValue(value);
+	}
+
+	private void stopSnakes() {
+		for (Snake s : snakes) {
+			s.interrupt();
+		}
+	}
 
 }

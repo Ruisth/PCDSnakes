@@ -52,17 +52,21 @@ public abstract class Snake extends Thread implements Serializable{
 		return cells;
 	}
 
-	//Criação da movimentação das snakes
+	//Movimentação das snakes
 	public void move(Cell newCell) throws InterruptedException {
+		System.out.println(this.getCells().getFirst().getGameElement());
 		// Check if the new position is valid and available
 		if (isValid(newCell.getPosition())) {
+			newCell.request(this);
 			//Check if the new position is occupied by the snake
-			for (Cell cell : cells) {
-				if (cell.isEqual(newCell)) {
-					return;
+			for (Snake snake : board.getSnakes()) {
+				for (int i = 0; i < snake.getCells().size(); i++) {
+					if (newCell.isEqual(snake.getCells().get(i))) {
+						System.err.println("EM CHOQUE!!!");
+						return;
+					}
 				}
 			}
-			newCell.request(this);
 			// Move the snake to the new cell
 			cells.addFirst(newCell);
 			if (cells.size() > size) {
@@ -70,6 +74,16 @@ public abstract class Snake extends Thread implements Serializable{
 				Cell tail = cells.removeLast();
 				tail.release();
 			}
+		}
+		//Verificar se é goal
+		if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
+
+			newCell.getGoal().captureGoal();
+			int value = newCell.getGoal().getValue();
+			newCell.removeGoal();
+			board.addGoal();
+			board.setGoalValue(value);
+
 		}
 		// Update the GUI to reflect the snake's new position
 		board.setChanged();
