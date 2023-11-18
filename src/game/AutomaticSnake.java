@@ -23,10 +23,8 @@ public class AutomaticSnake extends Snake {
 
 	}
 
-	Thread endGame =  new Thread() {
 	@Override
 	public void run() {
-		try {
 		doInitialPositioning();
 		state = true;
 		System.err.println("initial size:" + cells.size());
@@ -36,10 +34,9 @@ public class AutomaticSnake extends Snake {
 				sleep(Board.PLAYER_PLAY_INTERVAL * 10);
 				randomMove();
 			} catch (InterruptedException e) {
-				System.out.println(currentThread() + ": " + e.toString());
+				//System.out.println(currentThread() + ": " + e.toString());
+				stopSnake();
 			}
-		}
-		}
 		}
 	}
 
@@ -84,5 +81,9 @@ public class AutomaticSnake extends Snake {
 
 	public boolean isHumanSnake() {
 		return false;
+	}
+
+	private void stopSnake(){
+		state = false;
 	}
 }

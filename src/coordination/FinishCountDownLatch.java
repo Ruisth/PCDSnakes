@@ -1,4 +1,4 @@
-package synchronization;
+package coordination;
 
 /**
  * CountDownLatch utilizado para coordenacao de fim de jogo

@@ -75,8 +75,8 @@ public class SnakeGui implements Observer {
 					board.setChanged();
 					System.out.println("Old Position : [" + headPosition.getPosition().x + "," + headPosition.getPosition().y + "]" +
 							" | New position : [" + newHeadPosition.getPosition().x + "," + newHeadPosition.getPosition().y + "]");
-				};
-			}
+				}
+            }
 
 		});
 		frame.add(resetObstaclesButton,BorderLayout.SOUTH);

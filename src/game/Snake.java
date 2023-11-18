@@ -9,6 +9,7 @@ import gui.SnakeGui;
 import environment.Board;
 import environment.BoardPosition;
 import environment.Cell;
+import coordination.FinishCountDownLatch;
 
 import static environment.BoardPosition.isValid;
 
@@ -30,9 +31,10 @@ public abstract class Snake extends Thread implements Serializable{
 		this.id = id;
 		this.board=board;
 	}
-
 	@Override
-	public void run() {}
+	public void run() {
+	}
+
 
 	public abstract boolean isHumanSnake();
 
@@ -83,6 +85,7 @@ public abstract class Snake extends Thread implements Serializable{
 			newCell.removeGoal();
 			board.addGoal();
 			board.setGoalValue(value);
+			//Board.countDownLatch.countDown();
 
 		}
 		// Update the GUI to reflect the snake's new position

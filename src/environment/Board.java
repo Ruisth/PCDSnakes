@@ -1,6 +1,5 @@
 package environment;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,21 +9,20 @@ import game.GameElement;
 import game.Goal;
 import game.Obstacle;
 import game.Snake;
-import synchronization.FinishCountDownLatch;
+import coordination.FinishCountDownLatch;
 
 public abstract class Board extends Observable {
 	protected Cell[][] cells;
 	private BoardPosition goalPosition;
-	//private Goal goal; //não existia
 	public static final long PLAYER_PLAY_INTERVAL = 20;
 	public static final long REMOTE_REFRESH_INTERVAL = 200;
 	public static final int NUM_COLUMNS = 30;
 	public static final int NUM_ROWS = 30;
 	protected LinkedList<Snake> snakes = new LinkedList<Snake>();
 	protected LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
-	protected boolean isFinished;
+	protected boolean isFinished = false;
 
-	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(1/*quando for apanhado o goal 9*/);
+	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(Goal.MAX_VALUE);
 
 	public Board() {
 		cells = new Cell[NUM_COLUMNS][NUM_ROWS];
@@ -33,6 +31,31 @@ public abstract class Board extends Observable {
 				cells[x][y] = new Cell(new BoardPosition(x, y));
 			}
 		}
+		// Inicia a thread que espera que o jogo acabe e interrompe todos os players
+		Thread endGame =  new Thread() {
+			@Override
+			public void run() {
+				try {
+					countDownLatch.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				//Matar threads e terminar jogo
+				for (Snake snake : snakes) {
+					snake.interrupt();
+					stopSnakes();
+					System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				}
+
+				isFinished = true;
+				//O que fazer quando acabar
+				System.err.println("GAME FINISHED!");
+			}
+		};
+		endGame.start();
+		//TODO Debug morte
+		//Server server = new Server(this);
+		//server.start();
 
 	}
 
@@ -51,7 +74,7 @@ public abstract class Board extends Observable {
 	public void setGoalPosition(BoardPosition goalPosition) {
 		this.goalPosition = goalPosition;
 	}
-	
+
 	public void addGameElement(GameElement gameElement) {
 		boolean placed=false;
 		while(!placed) {
@@ -81,7 +104,7 @@ public abstract class Board extends Observable {
 		return possibleCells;
 
 	}
-	
+
 
 	public Goal addGoal() {
 		Goal goal=new Goal(this);
@@ -99,7 +122,7 @@ public abstract class Board extends Observable {
 			numberObstacles--;
 		}
 	}
-	
+
 	public LinkedList<Snake> getSnakes() {
 		return snakes;
 	}
@@ -115,9 +138,9 @@ public abstract class Board extends Observable {
 		return obstacles;
 	}
 
-	
-	public abstract void init(); 
-	
+
+	public abstract void init();
+
 	public abstract void handleKeyPress(int keyCode);
 
 	public abstract void handleKeyRelease();

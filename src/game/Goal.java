@@ -26,10 +26,7 @@ public class Goal extends GameElement  {
 		System.out.println("Novo valor : " + this.value + " !!!!!! ");
 		//board.addGoal();
 		// Check if the goal's value has reached the maximum value
-		if (getValue() == Goal.MAX_VALUE) {
-			// Trigger the game's end condition
-			countDownLatch.countDown();
-		}
+		countDownLatch.countDown();
 	}
 
 	public void setValue(int value) {
