@@ -5,10 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
-import game.GameElement;
-import game.Goal;
-import game.Obstacle;
-import game.Snake;
+import game.*;
 import coordination.FinishCountDownLatch;
 
 public abstract class Board extends Observable {
@@ -119,6 +116,8 @@ public abstract class Board extends Observable {
 			Obstacle obs=new Obstacle(this);
 			addGameElement( obs);
 			getObstacles().add(obs);
+			//ObstacleMover mover = new ObstacleMover(obs, (LocalBoard) this);
+			//mover.start();
 			numberObstacles--;
 		}
 	}

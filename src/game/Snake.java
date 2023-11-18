@@ -58,36 +58,26 @@ public abstract class Snake extends Thread implements Serializable{
 	public void move(Cell newCell) throws InterruptedException {
 		System.out.println(this.getCells().getFirst().getGameElement());
 		// Check if the new position is valid and available
-		if (isValid(newCell.getPosition())) {
+		if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
 			newCell.request(this);
-			//Check if the new position is occupied by the snake
-			for (Snake snake : board.getSnakes()) {
-				for (int i = 0; i < snake.getCells().size(); i++) {
-					if (newCell.isEqual(snake.getCells().get(i))) {
-						System.err.println("EM CHOQUE!!!");
-						return;
-					}
-				}
-			}
 			// Move the snake to the new cell
-			cells.addFirst(newCell);
-			if (cells.size() > size) {
-				// Remove the tail cell if the snake exceeds its size limit
-				Cell tail = cells.removeLast();
-				tail.release();
-			}
+				cells.addFirst(newCell);
+				if (cells.size() > size) {
+					// Remove the tail cell if the snake exceeds its size limit
+					Cell tail = cells.removeLast();
+					tail.release();
+				}
 		}
-		//Verificar se é goal
+		//Verificar se é goal e cresce a snake que come o goal
 		if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
-
-
 			newCell.getGoal().captureGoal();
 			int value = newCell.getGoal().getValue();
 			newCell.removeGoal();
 			if(value < 10) {
 				board.addGoal();
 				board.setGoalValue(value);
-				//Board.countDownLatch.countDown();
+				size++;
+				System.err.println("Snake " + getIdentification() + " Current Size: " + size + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
 			}
 
 		}
@@ -118,6 +108,8 @@ public abstract class Snake extends Thread implements Serializable{
 			e1.printStackTrace();
 		}
 		cells.add(board.getCell(at));
+
+
 		System.err.println("Snake "+getIdentification()+" starting at:"+getCells().getLast());
 	}
 

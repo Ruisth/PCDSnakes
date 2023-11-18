@@ -47,6 +47,7 @@ public class Cell {
 			throws InterruptedException {
 				//TODO coordination and mutual exclusion
 		ocuppyingSnake = null;
+		gameElement = null;
 	}
 
 	public boolean isOcupiedBySnake() {
@@ -79,6 +80,7 @@ public class Cell {
 
 	public void removeObstacle() {
 	//TODO
+		gameElement = null;
 	}
 
 

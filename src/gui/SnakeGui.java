@@ -68,7 +68,9 @@ public class SnakeGui implements Observer {
 					Cell newHeadPosition = board.getCell(boardPosition);
 					// Move the snake to the new position
 					try {
-						snake.move(newHeadPosition);
+						if(!newHeadPosition.isOcupiedBySnake()) {
+							snake.move(newHeadPosition);
+						}
 					} catch (InterruptedException ex) {
 						throw new RuntimeException(ex);
 					}
