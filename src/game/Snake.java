@@ -61,12 +61,12 @@ public abstract class Snake extends Thread implements Serializable{
 		if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
 			newCell.request(this);
 			// Move the snake to the new cell
-				cells.addFirst(newCell);
-				if (cells.size() > size) {
-					// Remove the tail cell if the snake exceeds its size limit
-					Cell tail = cells.removeLast();
-					tail.release();
-				}
+			cells.addFirst(newCell);
+			if (cells.size() > size) {
+				// Remove the tail cell if the snake exceeds its size limit
+				Cell tail = cells.removeLast();
+				tail.release();
+			}
 		}
 		//Verificar se é goal e cresce a snake que come o goal
 		if (newCell.isEqual(new Cell(board.getGoalPosition()))) {

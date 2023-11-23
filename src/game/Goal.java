@@ -24,8 +24,6 @@ public class Goal extends GameElement  {
 		// Increment the goal's value
 		incrementValue();
 		System.out.println("Novo valor : " + this.value + " !!!!!! ");
-		//board.addGoal();
-		// Check if the goal's value has reached the maximum value
 		countDownLatch.countDown();
 	}
 

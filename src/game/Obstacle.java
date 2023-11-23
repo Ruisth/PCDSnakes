@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static environment.BoardPosition.isValid;
+
 public class Obstacle extends GameElement {
 	
 	
@@ -28,7 +30,7 @@ public class Obstacle extends GameElement {
 		return remainingMoves;
 	}
 
-	/*public int getX() {
+	public int getX() {
 		return x;
 	}
 
@@ -36,12 +38,10 @@ public class Obstacle extends GameElement {
 		return y;
 	}
 
-	public void move() {
+	public void move(Cell newCell) {
 		BoardPosition newPosition = getRandomUnoccupiedPosition();
 
-		if (newPosition != null) {
-			BoardPosition currentCell = null;
-
+		if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
 			if(null != getRandomUnoccupiedPosition()){
 
 			}
@@ -94,8 +94,5 @@ public class Obstacle extends GameElement {
 	private void setPosition(BoardPosition newPosition) {
 		x = newPosition.getX();
 		y = newPosition.getY();
-	}*/
-
-
-
+	}
 }

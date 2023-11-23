@@ -65,15 +65,8 @@ public class AutomaticSnake extends Snake {
 					}
 				}
 			}
-
-			//System.out.println("Snake " + getIdentification() + " old distance to goal : " + oldDistanceGoal);
-			//System.out.println("Snake " + getIdentification() + " new distance to goal : " + newDistanceGoal);
-
+			//Call method move from Snake
 			move(newCell);
-			//Notify the GUI to change snake position
-			//board.setChanged();
-			//System.out.println("Snake " + getIdentification() + " moved to: [" + getCells().getFirst().getPosition().x + "," + getCells().getFirst().getPosition().y + "]");
-
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
