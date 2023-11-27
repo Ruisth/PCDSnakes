@@ -2,6 +2,7 @@ package game;
 
 import coordination.FinishCountDownLatch;
 import environment.BoardPosition;
+import environment.Cell;
 import environment.LocalBoard;
 import environment.Board;
 
@@ -18,17 +19,20 @@ public class ObstacleMover extends Thread {
 		@Override
 		public void run() {
 			// TODO
-			/*try {
+			try {
 				while (!isInterrupted()) {
 					// Move o obstáculo
-					obstacle.move();
-					// Notifica o board para atualizar a posição do obstáculo
-					board.setChanged();
-					// Aguarda o próximo intervalo
-					sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
+					if(obstacle.getRemainingMoves() > 0){
+						obstacle.move();
+						board.setChanged();
+						// Aguarda o próximo intervalo
+						sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
+					}else{
+						break;
+					}
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}*/
+			}
 		}
 }

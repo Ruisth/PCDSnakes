@@ -3,9 +3,7 @@ package game;
 import environment.Board;
 import environment.BoardPosition;
 import environment.Cell;
-import environment.LocalBoard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,11 +11,11 @@ import java.util.Random;
 import static environment.BoardPosition.isValid;
 
 public class Obstacle extends GameElement {
-	
-	
+
+
 	public static final int NUM_MOVES=3;
 	public static final int OBSTACLE_MOVE_INTERVAL = 400;
-	private int remainingMoves=NUM_MOVES;
+	private int remainingMoves = NUM_MOVES;
 	private Board board;
 	private int x;
 	private int y;
@@ -25,7 +23,7 @@ public class Obstacle extends GameElement {
 		super();
 		this.board = board;
 	}
-	
+
 	public int getRemainingMoves() {
 		return remainingMoves;
 	}
@@ -38,25 +36,21 @@ public class Obstacle extends GameElement {
 		return y;
 	}
 
-	public void move(Cell newCell) {
-		BoardPosition newPosition = getRandomUnoccupiedPosition();
+	public void move() throws InterruptedException {
+		if(remainingMoves > 0) {
+			BoardPosition newPosition = getRandomUnoccupiedPosition();
 
-		if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
-			if(null != getRandomUnoccupiedPosition()){
-
+			if (newPosition != null) {
+				Cell newCell = setPosition(newPosition);
+				//newCell.setGameElement(this);
+				remainingMoves--;
+				board.setChanged();
 			}
-			currentCell.removeObstacle();
-
-			setPosition(newPosition);
-
-			Cell newCell = board.getCell(newPosition);
-			newCell.setGameElement(this);
 		}
 	}
 
 	private BoardPosition getRandomUnoccupiedPosition() {
-		// Lógica para obter uma posição aleatória sem ocupação
-		// ...
+		// Obter uma posição aleatória sem ocupação
 		Random random = new Random();
 
 		List<BoardPosition> allPositions = new ArrayList<>();
@@ -91,8 +85,10 @@ public class Obstacle extends GameElement {
 		//return new BoardPosition(board.getRandomPosition().getX(), board.getRandomPosition().getY());
 	}
 
-	private void setPosition(BoardPosition newPosition) {
+	private Cell setPosition(BoardPosition newPosition) {
 		x = newPosition.getX();
 		y = newPosition.getY();
+
+		return board.getCell(newPosition);
 	}
 }

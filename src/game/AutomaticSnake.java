@@ -56,7 +56,7 @@ public class AutomaticSnake extends Snake {
 				for (BoardPosition pos : availableDirections) {
 					newDistanceGoal = pos.distanceTo(board.getGoalPosition());
 
-					if (newDistanceGoal <= oldDistanceGoal) {
+					if ( (!this.getCells().contains(board.getCell(pos))) && (newDistanceGoal <= oldDistanceGoal) ) {
 						newCell = board.getCell(pos);
 						System.out.println(newCell.getPosition() + " moved to: [" + getCells().getFirst().getPosition().x + "," + getCells().getFirst().getPosition().y + "]");
 					}
@@ -66,7 +66,9 @@ public class AutomaticSnake extends Snake {
 				}
 			}
 			//Call method move from Snake
-			move(newCell);
+            if (newCell != null) {
+				move(newCell);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

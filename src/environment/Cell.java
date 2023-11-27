@@ -39,25 +39,46 @@ public class Cell {
 	public void request(Snake snake)
 			throws InterruptedException {
 		//TODO coordination and mutual exclusion
-		ocuppyingSnake = snake;
-
+		try{
+			lock.lock();
+			ocuppyingSnake = snake;
+		}finally {
+			lock.unlock();
+		}
 	}
 
 	public void release()
 			throws InterruptedException {
 				//TODO coordination and mutual exclusion
-		ocuppyingSnake = null;
-		gameElement = null;
+		try {
+			lock.lock();
+			ocuppyingSnake = null;
+			gameElement = null;
+		}finally {
+			lock.unlock();
+		}
 	}
 
 	public boolean isOcupiedBySnake() {
-		return ocuppyingSnake!=null;
+		try{
+			lock.lock();
+			return ocuppyingSnake!=null;
+		}finally {
+			lock.unlock();
+		}
+
 	}
 
 
 	public  void setGameElement(GameElement element) {
 		// TODO coordination and mutual exclusion
+		try{
+			lock.lock();
 			gameElement = element;
+		}finally {
+			lock.unlock();
+		}
+
 
 
 	}
@@ -73,14 +94,26 @@ public class Cell {
 
 
 	public  Goal removeGoal() {
-		gameElement = null;
-		return null;
+		try{
+			lock.lock();
+			gameElement = null;
+			return null;
+		}finally {
+			lock.unlock();
+		}
+
 	}
 
 
 	public void removeObstacle() {
 	//TODO
-		gameElement = null;
+		try{
+			lock.lock();
+			gameElement = null;
+		}finally {
+			lock.unlock();
+		}
+
 	}
 
 

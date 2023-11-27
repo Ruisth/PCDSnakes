@@ -17,6 +17,7 @@ import environment.Board;
 import environment.BoardPosition;
 import environment.Cell;
 import environment.LocalBoard;
+import game.AutomaticSnake;
 import game.Snake;
 
 /**
@@ -59,17 +60,24 @@ public class SnakeGui implements Observer {
 				for (Snake snake : board.getSnakes()) {
 					// Get the current head position of the snake
 					Cell headPosition = snake.getCells().getFirst();
+					Cell newMove = null;
 					// Get neighboring positions
+
 					List<BoardPosition> neighboringPositions = board.getNeighboringPositions(headPosition);
 					// Choose a random neighboring position
 					int randomIndex = (int) (Math.random() * neighboringPositions.size());
 					BoardPosition boardPosition = neighboringPositions.get(randomIndex);
 					// Retrieve the corresponding Cell object for the chosen BoardPosition
 					Cell newHeadPosition = board.getCell(boardPosition);
+					//Move to other direction different snake position
+					if(!newHeadPosition.isEqual(snake.getCells().get(1))){
+						newMove = newHeadPosition;
+					}
 					// Move the snake to the new position
 					try {
-						if(!newHeadPosition.isOcupiedBySnake()) {
-							snake.move(newHeadPosition);
+                        assert newMove != null;
+                        if(!newMove.isOcupiedBySnake()) {
+							snake.move(newMove);
 						}
 					} catch (InterruptedException ex) {
 						throw new RuntimeException(ex);
@@ -82,8 +90,6 @@ public class SnakeGui implements Observer {
 
 		});
 		frame.add(resetObstaclesButton,BorderLayout.SOUTH);
-
-
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

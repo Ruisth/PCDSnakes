@@ -18,7 +18,7 @@ import game.*;
 public class LocalBoard extends Board{
 	
 	private static final int NUM_SNAKES = 2;
-	public static final int NUM_OBSTACLES = 25;
+	public static final int NUM_OBSTACLES = 10;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
 
 	
@@ -31,6 +31,7 @@ public class LocalBoard extends Board{
 		}
 
 		addObstacles( NUM_OBSTACLES);
+
 		
 		Goal goal=addGoal();
 		System.err.println("All elements placed");
@@ -40,6 +41,10 @@ public class LocalBoard extends Board{
 		for(Snake s:snakes)
 			s.start();
 		// TODO: launch other threads
+		for (Obstacle obs:obstacles){
+			ObstacleMover move = new ObstacleMover(obs, this);
+			move.start();
+		}
 		setChanged();
 	}
 
