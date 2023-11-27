@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import game.*;
 
@@ -18,9 +19,8 @@ import game.*;
 public class LocalBoard extends Board{
 	
 	private static final int NUM_SNAKES = 2;
-	public static final int NUM_OBSTACLES = 10;
+	public static final int NUM_OBSTACLES = 0;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
-
 	
 
 	public LocalBoard() {

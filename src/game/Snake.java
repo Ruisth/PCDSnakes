@@ -73,11 +73,13 @@ public abstract class Snake extends Thread implements Serializable{
 			}
 			//Verificar se é goal e cresce a snake que come o goal
 			if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
-				newCell.getGoal().captureGoal();
 				int value = newCell.getGoal().getValue();
-				newCell.removeGoal();
+				newCell.getGoal().captureGoal();
+
 				if (value < 10) {
 					board.addGoal();
+					size += value;
+					value = newCell.getGoal().getValue();
 					board.setGoalValue(value);
 
 					//size = getSize() + value;
