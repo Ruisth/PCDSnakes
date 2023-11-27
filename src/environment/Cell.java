@@ -1,18 +1,15 @@
 package environment;
 
-import java.io.Serializable;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.sound.midi.SysexMessage;
 
 import game.GameElement;
 import game.Goal;
 import game.Obstacle;
 import game.Snake;
-import game.AutomaticSnake;
-/** Main class for game representation. 
+
+/** Main class for game representation.
  * 
  * @author luismota
  *
@@ -22,6 +19,7 @@ public class Cell {
 	private Snake ocuppyingSnake = null;
 	private GameElement gameElement=null;
 	public Lock lock = new ReentrantLock();
+	public Condition lockCondition = lock.newCondition();
 	public GameElement getGameElement() {
 		return gameElement;
 	}
@@ -41,6 +39,9 @@ public class Cell {
 		//TODO coordination and mutual exclusion
 		try{
 			lock.lock();
+			while (ocuppyingSnake!=null){
+				lockCondition.await();
+			}
 			ocuppyingSnake = snake;
 		}finally {
 			lock.unlock();
@@ -54,6 +55,7 @@ public class Cell {
 			lock.lock();
 			ocuppyingSnake = null;
 			gameElement = null;
+			lockCondition.signalAll();
 		}finally {
 			lock.unlock();
 		}
@@ -66,7 +68,6 @@ public class Cell {
 		}finally {
 			lock.unlock();
 		}
-
 	}
 
 
@@ -78,9 +79,6 @@ public class Cell {
 		}finally {
 			lock.unlock();
 		}
-
-
-
 	}
 
 	public boolean isOcupied() {
@@ -93,7 +91,7 @@ public class Cell {
 	}
 
 
-	public  Goal removeGoal() {
+	public Goal removeGoal() {
 		try{
 			lock.lock();
 			gameElement = null;
@@ -101,7 +99,6 @@ public class Cell {
 		}finally {
 			lock.unlock();
 		}
-
 	}
 
 
@@ -113,7 +110,6 @@ public class Cell {
 		}finally {
 			lock.unlock();
 		}
-
 	}
 
 
@@ -129,5 +125,10 @@ public class Cell {
 	public boolean isEqual(Cell newCell) {
         return this.position.x == newCell.position.x && this.position.y == newCell.position.y;
     }
+
+	@Override
+	public String toString() {
+		return "(" + position.x + ", " + position.y + ")";
+	}
 
 }

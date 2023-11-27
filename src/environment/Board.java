@@ -18,7 +18,6 @@ public abstract class Board extends Observable {
 	protected LinkedList<Snake> snakes = new LinkedList<Snake>();
 	protected LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
 	protected boolean isFinished = false;
-
 	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(Goal.MAX_VALUE);
 
 	public Board() {

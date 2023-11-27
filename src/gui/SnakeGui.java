@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -58,32 +59,37 @@ public class SnakeGui implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				// TODO
 				for (Snake snake : board.getSnakes()) {
+
 					// Get the current head position of the snake
 					Cell headPosition = snake.getCells().getFirst();
 					Cell newMove = null;
-					// Get neighboring positions
 
+					// Get neighboring positions
 					List<BoardPosition> neighboringPositions = board.getNeighboringPositions(headPosition);
+
 					// Choose a random neighboring position
 					int randomIndex = (int) (Math.random() * neighboringPositions.size());
 					BoardPosition boardPosition = neighboringPositions.get(randomIndex);
+
 					// Retrieve the corresponding Cell object for the chosen BoardPosition
 					Cell newHeadPosition = board.getCell(boardPosition);
+
 					//Move to other direction different snake position
-					if(!newHeadPosition.isEqual(snake.getCells().get(1))){
+					if(/*!newHeadPosition.isEqual(snake.getCells().get(1)) &&*/ !newHeadPosition.isOcupied()){
+						System.out.println("Snake " + snake.getIdentification() + " Cells : " + Arrays.toString(snake.getCells().toArray()));
 						newMove = newHeadPosition;
 					}
+
 					// Move the snake to the new position
 					try {
-                        assert newMove != null;
-                        if(!newMove.isOcupiedBySnake()) {
+						if (newMove != null && !newMove.isOcupiedBySnake()) {
 							snake.move(newMove);
 						}
 					} catch (InterruptedException ex) {
 						throw new RuntimeException(ex);
 					}
 					board.setChanged();
-					System.out.println("Old Position : [" + headPosition.getPosition().x + "," + headPosition.getPosition().y + "]" +
+					System.out.println(" Snake " + snake.getIdentification() + " Old Position : [" + headPosition.getPosition().x + "," + headPosition.getPosition().y + "]" +
 							" | New position : [" + newHeadPosition.getPosition().x + "," + newHeadPosition.getPosition().y + "]");
 				}
             }

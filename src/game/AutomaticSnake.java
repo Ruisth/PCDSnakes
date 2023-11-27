@@ -54,14 +54,14 @@ public class AutomaticSnake extends Snake {
 
 			synchronized (this) {
 				for (BoardPosition pos : availableDirections) {
+					//Nova distância é igual à diferença entre a posição e o Objetivo
 					newDistanceGoal = pos.distanceTo(board.getGoalPosition());
 
+					// Verifica se a distância para onde se quer mover é menor que a de onde estava
+					// Verifica que a snake não contém a posição para onde se quer mover
 					if ( (!this.getCells().contains(board.getCell(pos))) && (newDistanceGoal <= oldDistanceGoal) ) {
 						newCell = board.getCell(pos);
-						System.out.println(newCell.getPosition() + " moved to: [" + getCells().getFirst().getPosition().x + "," + getCells().getFirst().getPosition().y + "]");
-					}
-					if (head.getPosition().equals(board.getGoalPosition())) {
-						this.wait();
+						System.out.println("Snake " + getIdentification() + " [" + getCells().getFirst().getPosition().x + "," + getCells().getFirst().getPosition().y + "]" + " moved to: " + newCell.getPosition());
 					}
 				}
 			}
