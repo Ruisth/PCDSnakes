@@ -38,8 +38,16 @@ public class LocalBoard extends Board{
 	}
 
 	public void init() {
-		for(Snake s:snakes)
-			s.start();
+		// Create an ExecutorService with a fixed number of threads
+		ExecutorService executor = Executors.newFixedThreadPool(snakes.size());
+
+		// Submit tasks for each snake to the ExecutorService
+		for (Snake snake : snakes) {
+			executor.submit(() -> snake.start());
+		}
+
+		// Shut down the ExecutorService when all snakes have finished
+		executor.shutdown();
 		// TODO: launch other threads
 		for (Obstacle obs:obstacles){
 			ObstacleMover move = new ObstacleMover(obs, this);
@@ -48,7 +56,6 @@ public class LocalBoard extends Board{
 		setChanged();
 	}
 
-	
 
 	@Override
 	public void handleKeyPress(int keyCode) {

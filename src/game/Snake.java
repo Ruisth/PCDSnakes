@@ -79,7 +79,8 @@ public abstract class Snake extends Thread implements Serializable{
 				if (value < 10) {
 					board.addGoal();
 					board.setGoalValue(value);
-					size++;
+
+					//size = getSize() + value;
 					System.err.println("Snake " + getIdentification() + " Current Size: " + size + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
 				}
 
