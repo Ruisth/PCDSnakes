@@ -20,19 +20,16 @@ public class ObstacleMover extends Thread {
 	public void run() {
 		// TODO
 		try {
-			while (!isInterrupted()) {
-				// Move o obstáculo
-				if (obstacle.getRemainingMoves() > 0) {
-					obstacle.move();
-					board.setChanged();
-					// Aguarda o próximo intervalo
+			/*for (Obstacle obs : board.getObstacles()) {*/
+				while (obstacle.getRemainingMoves() > 0) {
 					sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
-				} else {
-					break;
+					obstacle.move();
 				}
+
+				// Aguarda o próximo intervalo
+
+			} catch(InterruptedException e){
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

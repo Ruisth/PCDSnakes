@@ -31,7 +31,7 @@ public class AutomaticSnake extends Snake {
 		//TODO: automatic movement
 		while (state) {
 			try {
-				sleep(Board.PLAYER_PLAY_INTERVAL * 10);
+				sleep(Board.PLAYER_PLAY_INTERVAL);
 				randomMove();
 			} catch (InterruptedException e) {
 				//System.out.println(currentThread() + ": " + e.toString());

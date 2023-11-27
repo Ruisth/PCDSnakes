@@ -30,7 +30,7 @@ public class LocalBoard extends Board{
 			snakes.add(snake);
 		}
 
-		addObstacles( NUM_OBSTACLES);
+		addObstacles(NUM_OBSTACLES);
 
 		Goal goal=addGoal();
 		System.err.println("All elements placed");
@@ -38,24 +38,19 @@ public class LocalBoard extends Board{
 
 	public void init() {
 		// Create an ExecutorService with a fixed number of threads
-		ExecutorService executor = Executors.newFixedThreadPool(snakes.size());
+		ExecutorService pool = Executors.newFixedThreadPool(NUM_SIMULTANEOUS_MOVING_OBSTACLES);
 
 		// Submit tasks for each snake to the ExecutorService
 		for (Snake snake : snakes) {
-			executor.submit(() -> {
-				synchronized (snake) {
-					snake.start();
-				}
-			});
+			snake.start();
 		}
-		// Shut down the ExecutorService when all snakes have finished
-		executor.shutdown();
 
 		// TODO: launch other threads
-		for (Obstacle obs:obstacles){
-			ObstacleMover move = new ObstacleMover(obs, this);
-			move.start();
+		for (Obstacle obs : obstacles) {
+			ObstacleMover mover = new ObstacleMover(obs, this);
+				pool.submit(mover);
 		}
+		pool.shutdown();
 		setChanged();
 	}
 

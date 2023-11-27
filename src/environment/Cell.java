@@ -106,7 +106,9 @@ public class Cell {
 	//TODO
 		try{
 			lock.lock();
-			gameElement = null;
+				gameElement = null;
+			System.err.println("REMOVI : " + getGameElement());
+
 		}finally {
 			lock.unlock();
 		}
