@@ -56,33 +56,39 @@ public abstract class Snake extends Thread implements Serializable{
 
 	//Movimentação das snakes
 	public void move(Cell newCell) throws InterruptedException {
-		System.out.println(this.getCells().getFirst().getGameElement());
-		// Check if the new position is valid and available
-		if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
-			newCell.request(this);
-			// Move the snake to the new cell
-			cells.addFirst(newCell);
-			if (cells.size() > size) {
-				// Remove the tail cell if the snake exceeds its size limit
-				Cell tail = cells.removeLast();
-				tail.release();
-			}
-		}
-		//Verificar se é goal e cresce a snake que come o goal
-		if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
-			newCell.getGoal().captureGoal();
-			int value = newCell.getGoal().getValue();
-			newCell.removeGoal();
-			if(value < 10) {
-				board.addGoal();
-				board.setGoalValue(value);
-				size++;
-				System.err.println("Snake " + getIdentification() + " Current Size: " + size + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
-			}
 
+		try {
+			//lock aqui (acho que temos que bloquear todas as celulas ocupadas pela snake)
+			System.out.println(this.getCells().getFirst().getGameElement());
+			// Check if the new position is valid and available
+			if (isValid(newCell.getPosition()) && !newCell.isOcupied()) {
+				newCell.request(this);
+				// Move the snake to the new cell
+				cells.addFirst(newCell);
+				if (cells.size() > size) {
+					// Remove the tail cell if the snake exceeds its size limit
+					Cell tail = cells.removeLast();
+					tail.release();
+				}
+			}
+			//Verificar se é goal e cresce a snake que come o goal
+			if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
+				newCell.getGoal().captureGoal();
+				int value = newCell.getGoal().getValue();
+				newCell.removeGoal();
+				if (value < 10) {
+					board.addGoal();
+					board.setGoalValue(value);
+					size++;
+					System.err.println("Snake " + getIdentification() + " Current Size: " + size + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
+				}
+
+			}
+			// Update the GUI to reflect the snake's new position
+			board.setChanged();
+		} finally {
+			//unlock aqui
 		}
-		// Update the GUI to reflect the snake's new position
-		board.setChanged();
 	}
 
 
