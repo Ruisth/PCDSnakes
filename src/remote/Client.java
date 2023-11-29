@@ -45,7 +45,7 @@ public class Client {
 		output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
 	}
 	public static void main(String[] args) {
-	// TODO
+		new Client();
 	}
 
 }
