@@ -1,4 +1,6 @@
-package remote;
+package game;
+
+import environment.Board;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,11 +11,41 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-	// TODO
+    public class Connection extends Thread {
+        private ServerSocket socket;
+        public Board board;
+        private ArrayList<DealWithClient> dwc;
+
+        public Connection(ServerSocket socket, Board board) {
+            this.socket = socket;
+            this.board = board;
+            dwc = new ArrayList<>;
+        }
+
+        public void run() {
+            try {
+                while (true) {
+                    Socket socket = this.socket.accept();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    public class DealWithClient extends Thread {
+
+    }
+
+    public static final int PORT = 25565;
 }
 
 
-/* Servidor da TingTing
+
+
+
+/*
 public class Server {
     public class AcceptConnectionThread extends Thread {
         private ServerSocket ss;
@@ -193,4 +225,5 @@ public class Server {
             ss.close();
         }
     }
-}*/
+}
+*/
