@@ -51,6 +51,10 @@ public class SnakeGui implements Observer {
 		buildGui();
 	}
 
+	public SnakeGui() {
+
+	}
+
 	private void buildGui() {
 		frame.setLayout(new BorderLayout());
 
@@ -115,5 +119,9 @@ public class SnakeGui implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		boardGui.repaint();
+	}
+
+	public Board getBoard() {
+		return this.board;
 	}
 }

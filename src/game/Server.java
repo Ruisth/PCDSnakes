@@ -1,6 +1,7 @@
 package game;
 
 import environment.Board;
+import gui.SnakeGui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import static gui.SnakeGui.*;
 
 public class Server {
     public class Connection extends Thread {
@@ -25,6 +28,7 @@ public class Server {
         public void run() {
             try {
                 while (true) {
+                    Board board = SnakeGui.getBoard();
                     Socket socket = this.socket.accept();
                 }
             } catch (IOException e) {
@@ -39,6 +43,27 @@ public class Server {
     }
 
     public static final int PORT = 25565;
+
+    public static void main(String[] args) {
+        try {
+            new Server().startServing();
+        }catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startServing() throws IOException, InterruptedException {
+        ServerSocket socket = new ServerSocket(PORT);
+
+        SnakeGui snakeGui = new SnakeGui();
+        Board board = snakeGui.getBoard();
+        snakeGui.init();
+
+        try {
+        } finally {
+            socket.close();
+        }
+    }
 }
 
 
