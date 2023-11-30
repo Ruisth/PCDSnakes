@@ -39,7 +39,14 @@ public class Server {
     }
 
     public class DealWithClient extends Thread {
+        private BufferedReader input;
+        private ObjectOutputStream output;
+        private Socket socket;
 
+        void doConnections() throws IOException {
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new ObjectOutputStream(socket.getOutputStream());
+        }
     }
 
     public static final int PORT = 25565;
