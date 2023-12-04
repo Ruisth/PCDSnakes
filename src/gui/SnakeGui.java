@@ -122,6 +122,6 @@ public class SnakeGui implements Observer {
 	}
 
 	public Board getBoard() {
-		return this.board;
+		return board;
 	}
 }

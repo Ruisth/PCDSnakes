@@ -6,7 +6,7 @@ import environment.Board;
   * @author luismota
   *
   */
-public abstract class HumanSnake extends Snake {
+public class HumanSnake extends Snake {
 	
 	public HumanSnake(int id,Board board) {
 		super(id,board);

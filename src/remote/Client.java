@@ -2,12 +2,15 @@ package remote;
 
 
 import game.Server;
+import game.Snake;
 import gui.SnakeGui;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /** Remore client, only for part II
  * 
@@ -29,7 +32,7 @@ public class Client {
 		this.snakeGui = new SnakeGui(nickName);
 	}
 
-	public void runClient(String address, int port) {
+	public void runClient(String address, int port) throws ClassNotFoundException {
 		try {
 			snakeGui.init();
 			connect(address, port);
@@ -55,8 +58,9 @@ public class Client {
 		}
 	}
 
-	void receive() {
-
+	void receive() throws IOException, ClassNotFoundException {
+		LinkedList<Snake> read = (LinkedList<Snake>) input.readObject();
+		snakeGui.getBoard().setSnakes(read);
 	}
 
 	void connect(String address, int port) throws IOException {
@@ -70,7 +74,7 @@ public class Client {
 		output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 		new Client("Player 1").runClient("localhost",25565);
 	}
 

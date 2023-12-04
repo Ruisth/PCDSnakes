@@ -17,7 +17,7 @@ import game.Snake;
 import static java.awt.event.KeyEvent.*;
 
 /** Remote representation of the game, no local threads involved.
- * Game state will be changed when updated info is received from Srver.
+ * Game state will be changed when updated info is received from Server.
  * Only for part II of the project.
  * @author luismota
  *

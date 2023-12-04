@@ -17,6 +17,11 @@ public abstract class Board extends Observable {
 	public static final int NUM_ROWS = 30;
 	protected LinkedList<Snake> snakes = new LinkedList<Snake>();
 	protected LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
+
+	public boolean isFinished() {
+		return isFinished;
+	}
+
 	protected boolean isFinished = false;
 	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(Goal.MAX_VALUE);
 
@@ -148,6 +153,11 @@ public abstract class Board extends Observable {
 		snakes.add(snake);
 	}
 
+	public void setSnakes(LinkedList<Snake> snakes) {
+		this.snakes = snakes;
+		setChanged();
+	}
+
 	public void setGoalValue(int value) {
 		getCell(getGoalPosition()).getGoal().setValue(value);
 	}
@@ -156,6 +166,10 @@ public abstract class Board extends Observable {
 		for (Snake s : snakes) {
 			s.interrupt();
 		}
+	}
+
+	public int getNumberSnakes() {
+		return snakes.size();
 	}
 
 }
