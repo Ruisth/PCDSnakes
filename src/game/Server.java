@@ -22,13 +22,13 @@ public class Server {
         public Connection(ServerSocket socket, Board board) {
             this.socket = socket;
             this.board = board;
-            dwc = new ArrayList<>;
+            //dwc = new ArrayList<>;
         }
 
         public void run() {
             try {
                 while (true) {
-                    Board board = SnakeGui.getBoard();
+                    //Board board = SnakeGui.getBoard();
                     Socket socket = this.socket.accept();
                 }
             } catch (IOException e) {

@@ -23,6 +23,8 @@ public class Client {
 
 	private SnakeGui snakeGui;
 
+	private RemoteBoard board;
+
 	public Client(String nickName) {
 		this.snakeGui = new SnakeGui(nickName);
 	}
@@ -32,8 +34,8 @@ public class Client {
 			snakeGui.init();
 			connect(address, port);
 			while (true) {
-				//recieve player status
-				//senddirection
+				receive();
+				send();
 			}
 		} catch (IOException e) {
             throw new RuntimeException(e);
@@ -45,6 +47,17 @@ public class Client {
 			}
 		}
     }
+
+	void send() throws IOException {
+		String directionPressed = board.getPressedDirection();
+		if (directionPressed != null) {
+			output.println(directionPressed);
+		}
+	}
+
+	void receive() {
+
+	}
 
 	void connect(String address, int port) throws IOException {
 		if (address == "") {

@@ -26,6 +26,11 @@ public class AutomaticSnake extends Snake {
 	@Override
 	public void run() {
 		doInitialPositioning();
+		try {
+			sleep(10000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 		state = true;
 		System.err.println("initial size:" + cells.size());
 		//TODO: automatic movement
