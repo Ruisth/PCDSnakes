@@ -13,6 +13,8 @@ import environment.Cell;
 import game.Goal;
 import game.Obstacle;
 import game.Snake;
+import gui.SnakeGui;
+import javax.swing.JFrame;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -26,7 +28,19 @@ public class RemoteBoard extends Board{
 
 	private boolean wasdOrArrows;
 	private String directionPressed;
-	
+	private JFrame frame;
+	private SnakeGui snakeGui;
+	public Board board;
+	public RemoteBoard(String frameName) {
+		super();
+		frame = new JFrame(frameName);
+		snakeGui = new SnakeGui(frameName);
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
 	@Override
 	public void handleKeyPress(int keyCode) {
 		if (wasdOrArrows) {
@@ -69,12 +83,13 @@ public class RemoteBoard extends Board{
 
 	@Override
 	public void init() {
-		// TODO 		
+		// TODO
+		frame.setVisible(true);
 	}
 
 	public String getPressedDirection() {
 		return directionPressed;
 	}
-	
+
 
 }

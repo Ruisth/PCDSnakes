@@ -52,7 +52,8 @@ public class SnakeGui implements Observer {
 	}
 
 	public SnakeGui() {
-
+		super();
+		buildGui();
 	}
 
 	private void buildGui() {

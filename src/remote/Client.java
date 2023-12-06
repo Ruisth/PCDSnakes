@@ -1,6 +1,7 @@
 package remote;
 
 
+import environment.Board;
 import game.Server;
 import game.Snake;
 import gui.SnakeGui;
@@ -27,12 +28,10 @@ public class Client {
 	private ObjectInputStream input;
 	private PrintWriter output;
 	private Socket socket;
-	private SnakeGui snakeGui;
-
-	private RemoteBoard board;
+	private RemoteBoard snakeGui;
 
 	public Client(String nickName) {
-		this.snakeGui = new SnakeGui(nickName);
+		this.snakeGui = new RemoteBoard(nickName);
 	}
 
 	public void runClient(String address, int port) {
@@ -59,7 +58,7 @@ public class Client {
     }
 
 	void send() throws IOException {
-		String directionPressed = board.getPressedDirection();
+		String directionPressed = snakeGui.getPressedDirection();
 		if (directionPressed != null) {
 			output.println(directionPressed);
 		}
@@ -82,7 +81,10 @@ public class Client {
 	}
 
 	public static void main(String[] args) {
-			new Client("Player 1").runClient("localhost",8081);
+		String serverAddress = "localhost";
+		int serverPort = 25565;
+
+		new Client("Player 1").runClient(serverAddress,serverPort);
 	}
 
 }
