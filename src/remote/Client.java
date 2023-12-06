@@ -5,7 +5,11 @@ import game.Server;
 import game.Snake;
 import gui.SnakeGui;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,7 +27,6 @@ public class Client {
 	private ObjectInputStream input;
 	private PrintWriter output;
 	private Socket socket;
-
 	private SnakeGui snakeGui;
 
 	private RemoteBoard board;
@@ -32,7 +35,7 @@ public class Client {
 		this.snakeGui = new SnakeGui(nickName);
 	}
 
-	public void runClient(String address, int port) throws ClassNotFoundException {
+	public void runClient(String address, int port) {
 		try {
 			snakeGui.init();
 			connect(address, port);
@@ -41,10 +44,14 @@ public class Client {
 				send();
 			}
 		} catch (IOException e) {
-            throw new RuntimeException(e);
+			e.printStackTrace();
+		}catch (ClassNotFoundException | ClassCastException e2){
+			return;
         } finally {
 			try {
-				socket.close();
+				if (socket != null) {
+					socket.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -68,14 +75,14 @@ public class Client {
 			InetAddress adr = InetAddress.getByName(null);
 			socket = new Socket(adr, Server.PORT);
 		} else {
-			socket = new Socket(address, Server.PORT);
+			socket = new Socket(address, port);
 		}
 		input = new ObjectInputStream(socket.getInputStream());
 		output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException {
-		new Client("Player 1").runClient("localhost",25565);
+	public static void main(String[] args) {
+			new Client("Player 1").runClient("localhost",8081);
 	}
 
 }

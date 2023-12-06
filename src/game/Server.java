@@ -55,7 +55,7 @@ public class Server {
                     try {
                         send();
                         sleep(Board.REMOTE_REFRESH_INTERVAL);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException | IOException e) {
                        e.printStackTrace();
                        return;
                     }
@@ -75,7 +75,7 @@ public class Server {
 
                 for (Snake s : gui.getBoard().getSnakes()) {
                     if (s.getCells() != null)
-                        snakeStatus.add(new Snake(s));
+                        snakeStatus.add(s);
                 }
             }
         }
