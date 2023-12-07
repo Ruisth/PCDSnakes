@@ -32,32 +32,6 @@ public abstract class Board extends Observable {
 				cells[x][y] = new Cell(new BoardPosition(x, y));
 			}
 		}
-		// Inicia a thread que espera que o jogo acabe e interrompe todos os players
-		Thread endGame =  new Thread() {
-			@Override
-			public void run() {
-				try {
-					countDownLatch.await();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//Matar threads e terminar jogo
-				for (Snake snake : snakes) {
-					snake.interrupt();
-					stopSnakes();
-					System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				}
-
-				isFinished = true;
-				//O que fazer quando acabar
-				System.err.println("GAME FINISHED!");
-			}
-		};
-		endGame.start();
-		//TODO Debug morte
-		//Server server = new Server(this);
-		//server.start();
-
 	}
 
 	public Cell getCell(BoardPosition cellCoord) {
@@ -162,7 +136,7 @@ public abstract class Board extends Observable {
 		getCell(getGoalPosition()).getGoal().setValue(value);
 	}
 
-	private void stopSnakes() {
+	public void stopSnakes() {
 		for (Snake s : snakes) {
 			s.interrupt();
 		}

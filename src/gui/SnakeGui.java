@@ -45,17 +45,6 @@ public class SnakeGui implements Observer {
 		buildGui();
 	}
 
-	public SnakeGui(String nickName) {
-		super();
-		frame = new JFrame(nickName);
-		buildGui();
-	}
-
-	public SnakeGui() {
-		super();
-		buildGui();
-	}
-
 	private void buildGui() {
 		frame.setLayout(new BorderLayout());
 
