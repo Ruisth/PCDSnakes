@@ -31,9 +31,7 @@ public abstract class Snake extends Thread implements Serializable{
 		this.id = id;
 		this.board=board;
 	}
-	@Override
-	public void run() {
-	}
+
 
 
 	public abstract boolean isHumanSnake();
