@@ -86,7 +86,7 @@ public class Server {
                 out.writeObject(gameStatus);
                 Board tempboard = snakeGui.getBoard();
                 System.out.println(tempboard);
-                //out.reset();
+                out.reset();
             }
         }
 
