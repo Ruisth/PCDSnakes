@@ -52,6 +52,7 @@ public class Server{
         private SnakeGui snakeGui;
         private GameStatus gameStatus;
 
+
         public class EnviaStatusThread extends Thread{
             public void run(){
                 while (!snakeGui.getBoard().isFinished()){
@@ -93,7 +94,7 @@ public class Server{
 
                 /*while (!snakeGui.getBoard().isFinished()){
                     recebeDirecao();
-                }*/
+                */
 
             sendStatus.interrupt();
         }

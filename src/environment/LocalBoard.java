@@ -17,7 +17,7 @@ import game.*;
  * @author luismota
  *
  */
-public class LocalBoard extends Board implements Serializable {
+public class LocalBoard extends Board implements Serializable{
 
 	private static final int NUM_SNAKES = 2;
 	public static final int NUM_OBSTACLES = 10;

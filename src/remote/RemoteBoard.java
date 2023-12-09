@@ -56,6 +56,7 @@ public class RemoteBoard extends Board{
 	public void init() {
 		// TODO
 		setChanged();
+		notifyObservers();
 	}
 
 }

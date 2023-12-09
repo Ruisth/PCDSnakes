@@ -146,4 +146,11 @@ public abstract class Board extends Observable {
 		return snakes.size();
 	}
 
+	public Board getBoard() {
+		return this;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 }
