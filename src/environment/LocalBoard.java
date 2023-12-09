@@ -19,8 +19,8 @@ import game.*;
  */
 public class LocalBoard extends Board implements Serializable{
 
+	public static final int NUM_OBSTACLES = 2;
 	private static final int NUM_SNAKES = 2;
-	public static final int NUM_OBSTACLES = 10;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
 
 
@@ -54,30 +54,24 @@ public class LocalBoard extends Board implements Serializable{
 		pool.shutdown();
 		setChanged();
 
-		// Inicia a thread que espera que o jogo acabe e interrompe todos os players
-		Thread endGame =  new Thread() {
-			@Override
-			public void run() {
-				try {
-					countDownLatch.await();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//Matar threads e terminar jogo
-				for (Snake snake : snakes) {
-					snake.interrupt();
-					stopSnakes();
-					System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				}
 
-				isFinished = true;
-				//O que fazer quando acabar
-				System.err.println("GAME FINISHED!");
-			}
-		};
-		endGame.start();
 		//TODO Debug morte
 
+	}
+
+	public void endGame() {
+		try {
+			countDownLatch.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		//Matar threads e terminar jogo
+		stopSnakes();
+
+		isFinished = true;
+		//O que fazer quando acabar
+		System.err.println("GAME FINISHED!");
 	}
 
 

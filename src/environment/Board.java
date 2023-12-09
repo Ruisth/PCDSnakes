@@ -9,7 +9,22 @@ import game.*;
 import coordination.FinishCountDownLatch;
 
 public abstract class Board extends Observable {
+
+	public void setCells(Cell[][] cells) {
+		this.cells = cells;
+	}
+
 	protected Cell[][] cells;
+	protected Board board;
+
+	public void setObstacles(LinkedList<Obstacle> obstacles) {
+		this.obstacles = obstacles;
+	}
+
+	public Cell[][] getCells() {
+		return cells;
+	}
+
 	private BoardPosition goalPosition;
 	public static final long PLAYER_PLAY_INTERVAL = 100;
 	public static final long REMOTE_REFRESH_INTERVAL = 200;
@@ -139,6 +154,7 @@ public abstract class Board extends Observable {
 	public void stopSnakes() {
 		for (Snake s : snakes) {
 			s.interrupt();
+			System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		}
 	}
 

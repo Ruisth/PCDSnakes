@@ -4,7 +4,9 @@ import environment.Board;
 import environment.BoardPosition;
 import environment.Cell;
 
-public class Obstacle extends GameElement {
+import java.io.Serializable;
+
+public class Obstacle extends GameElement implements Serializable {
 
 
 	public static final int NUM_MOVES=3;

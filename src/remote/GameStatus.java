@@ -69,8 +69,4 @@ public class GameStatus implements Serializable {
         board.setChanged();
 
     }
-
-    public Board getBoard() {
-        return board;
-    }
 }

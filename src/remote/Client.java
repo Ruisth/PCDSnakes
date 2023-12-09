@@ -6,7 +6,7 @@ import environment.LocalBoard;
 import game.HumanSnake;
 import game.Server;
 import game.Snake;
-import gui.SnakeGui;
+import gui.ClientGui;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -26,10 +26,8 @@ public class Client {
 	private PrintWriter out;
 	private Socket socket;
 	private final int PORTO;
-	private RemoteBoard remote = new RemoteBoard();
-	private Snake playerSnake;
 
-	private GameStatus gameStatus;
+	private ClientGui clientGui;
 
 	public Client(InetAddress endereco, int PORTO){
 		super();
@@ -39,37 +37,47 @@ public class Client {
 
 	public void connectToServer() throws IOException{
 		endereco = InetAddress.getByName("localhost");
-		System.out.println("1!");
 		socket = new Socket(endereco, Server.PORTO);
 		System.err.println("Socket : " + socket);
-		System.out.println("2!");
 		in = new ObjectInputStream(socket.getInputStream());
-		System.out.println("3!");
 		out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
-		System.out.println("4!");
+
 	}
 
 	public void sendMessages() throws IOException{
 			//usar o keyevent ou keycode
 	}
 
-	public void revieveMessages() throws IOException, ClassNotFoundException {
-		gameStatus = (GameStatus) in.readObject();
-		remote.setBoard(gameStatus.getBoard());
-		remote.setChanged();
+	public void receiveMessages() throws IOException, ClassNotFoundException {
+		System.out.println("Recebi objeto");
+		//Board boardteste = (Board) in.readObject();
+		//System.out.println("board: " + boardteste.toString());
+		//clientGui.getBoardGui().setBoard(boardteste);
+
+		GameStatus gs = (GameStatus) in.readObject();
+
+			clientGui.getBoard().setBoard(gs.getBoard());
+			clientGui.getBoard().setCells(gs.getCells());
+			clientGui.getBoard().setSnakes(gs.getSnakes());
+			clientGui.getBoard().setObstacles(gs.getObstacles());
+			clientGui.getBoard().setGoalPosition(gs.getGoalPosition());
+			Board tempboard = clientGui.getBoard();
+			System.out.println("Fiz setChanged");
+			clientGui.getBoard().setChanged();
 	}
 
 
 	public void runClient(){
-		SnakeGui gui = new SnakeGui(remote, 600, 0);
-		gui.init();
+		RemoteBoard board = new RemoteBoard();
+		clientGui = new ClientGui(board, 600, 0);
+		clientGui.init();
 
 		try{
 			connectToServer();
 			System.out.println("Conectei");
+
 			while (true) {
-				revieveMessages();
-				System.out.println("5555555555");
+				receiveMessages();
 				//sendMessages();
 			}
 		}catch (IOException | ClassNotFoundException e) { // ERRO
@@ -85,14 +93,13 @@ public class Client {
 
 
 
-	public static void main(String[] args) throws UnknownHostException {
-		// TODO
-		Client cliente = new Client(InetAddress.getByName("localHost"), 8085);
-		System.out.println("1111111111");
-		cliente.runClient();
-		System.out.println("222222222222222");
-		System.out.println("333333333333333");
-		System.out.println("4444444444");
+	public static void main(String[] args) {
+		try{
+			new Client(InetAddress.getByName("localHost"), 8085).runClient();
+		}catch (IOException e){
+			e.printStackTrace();
+			return;
+		}
 	}
 
 }
