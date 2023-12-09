@@ -197,7 +197,7 @@ public class Server{
     public class ConnectionHandler extends Thread{
         // Inicia a thread que espera que o jogo acabe e interrompe todos os players
         private BufferedReader in;
-        private PrintWriter out;
+        private ObjectOutputStream out;
         private final Socket conexao;
 
         public ConnectionHandler(Socket conexao){
@@ -206,7 +206,7 @@ public class Server{
 
         public void doConnections() throws IOException{
             in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(conexao.getOutputStream())),true);
+            out = new ObjectOutputStream(conexao.getOutputStream());
         }
 
         public void serve() throws IOException{
@@ -216,7 +216,7 @@ public class Server{
                     break;
                 }
                 System.out.println("Eco: " + str);
-                out.println(str);
+                //out.println(str);
             }
         }
 

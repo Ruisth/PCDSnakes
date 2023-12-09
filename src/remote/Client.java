@@ -41,17 +41,22 @@ public class Client {
 		endereco = InetAddress.getByName("localhost");
 		System.out.println("1!");
 		socket = new Socket(endereco, Server.PORTO);
-		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		System.err.println("Socket : " + socket);
+		System.out.println("2!");
+		in = new ObjectInputStream(socket.getInputStream());
+		System.out.println("3!");
 		out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
+		System.out.println("4!");
 	}
 
 	public void sendMessages() throws IOException{
-		for (int i = 0; i < 10; i++){
-			out.println("Ola " + i);
-			String str = in.readLine();
-			System.out.println(str);
-		}
-		out.println("FIM");
+			//usar o keyevent ou keycode
+	}
+
+	public void revieveMessages() throws IOException, ClassNotFoundException {
+		gameStatus = (GameStatus) in.readObject();
+		remote.setBoard(gameStatus.getBoard());
+		remote.setChanged();
 	}
 
 
@@ -61,8 +66,13 @@ public class Client {
 
 		try{
 			connectToServer();
-			sendMessages();
-		}catch (IOException e) { // ERRO
+			System.out.println("Conectei");
+			while (true) {
+				revieveMessages();
+				System.out.println("5555555555");
+				//sendMessages();
+			}
+		}catch (IOException | ClassNotFoundException e) { // ERRO
 			e.printStackTrace();
         } finally { // a fechar
 			try{
