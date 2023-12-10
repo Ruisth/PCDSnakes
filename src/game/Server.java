@@ -40,7 +40,7 @@ public class Server {
 
                     System.out.println(snake.getIdentification() + "" + snake.isHumanSnake() + "" + snake.getCells());
 
-                    GereCliente gc = new GereCliente(socket, this.snakeGui);
+                    GereCliente gc = new GereCliente(socket, this.snakeGui, snake);
                     gc.start();
                     gcThread.add(gc);
 
@@ -60,6 +60,7 @@ public class Server {
         private Socket socket;
         private SnakeGui snakeGui;
         private GameStatus gameStatus;
+        private HumanSnake humanSnake;
 
 
         public class EnviaStatusThread extends Thread {
@@ -95,9 +96,10 @@ public class Server {
             }
         }
 
-        public GereCliente(Socket socket, SnakeGui snakeGui) throws IOException {
+        public GereCliente(Socket socket, SnakeGui snakeGui, HumanSnake humanSnake) throws IOException {
             this.socket = socket;
             this.snakeGui = snakeGui;
+            this.humanSnake = humanSnake;
             fazConexao();
         }
 
@@ -123,8 +125,8 @@ public class Server {
         }
 
         public void recebeDirecao() throws IOException, InterruptedException{
-            int direction = Integer.parseInt(in.readLine());
-            snakeGui.getBoard().getHumanSnake().moveHuman(direction);
+            String direction = in.readLine();
+            humanSnake.moveHuman(direction);
         }
     }
 

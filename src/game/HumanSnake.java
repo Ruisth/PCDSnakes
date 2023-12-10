@@ -5,6 +5,9 @@ import environment.Cell;
 
 import java.awt.event.KeyEvent;
 
+import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+
 /** Class for a remote snake, controlled by a human
   * 
   * @author luismota
@@ -39,34 +42,38 @@ public class HumanSnake extends Snake {
 		}
 	 }
 
-	 public void moveHuman(int direction) {
-			//receber direção e ir buscar a celula dessa direção
-		 	//move(newCell);
-
-		 if (direction == KeyEvent.VK_UP) {
-			 try {
-				 move(getBoard().getCell(getCells().getFirst().getPosition().getCellAbove()));
-			 } catch (InterruptedException e) {
-				 throw new RuntimeException(e);
-			 }
-		 } else if (direction == KeyEvent.VK_DOWN) {
-			 try {
-				 move(getBoard().getCell(getCells().getFirst().getPosition().getCellBelow()));
-			 } catch (InterruptedException e) {
-				 throw new RuntimeException(e);
-			 }
-		 } else if (direction == KeyEvent.VK_LEFT) {
-			 try {
-				 move(getBoard().getCell(getCells().getFirst().getPosition().getCellLeft()));
-			 } catch (InterruptedException e) {
-				 throw new RuntimeException(e);
-			 }
-		 } else if (direction == KeyEvent.VK_RIGHT) {
-			 try {
-				 move(getBoard().getCell(getCells().getFirst().getPosition().getCellRight()));
-			 } catch (InterruptedException e) {
-				 throw new RuntimeException(e);
-			 }
+	 public void moveHuman(String direction) {
+		 switch (direction) {
+			 case "UP":
+				 try {
+					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellAbove()));
+				 } catch (InterruptedException e) {
+					 throw new RuntimeException(e);
+				 }
+				 break;
+			 case "DOWN":
+				 try {
+					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellBelow()));
+				 } catch (InterruptedException e) {
+					 throw new RuntimeException(e);
+				 }
+				 break;
+			 case "LEFT":
+				 try {
+					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellLeft()));
+				 } catch (InterruptedException e) {
+					 throw new RuntimeException(e);
+				 }
+				 break;
+			 case "RIGHT":
+				 try {
+					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellRight()));
+				 } catch (InterruptedException e) {
+					 throw new RuntimeException(e);
+				 }
+				 break;
+			 default:
+				 break;
 		 }
 	 }
 

@@ -26,8 +26,8 @@ public class Client {
 	private PrintWriter out;
 	private Socket socket;
 	private final int PORTO;
-
 	private ClientGui clientGui;
+	private String lastDirection;
 
 	public Client(InetAddress endereco, int PORTO){
 		super();
@@ -44,12 +44,13 @@ public class Client {
 
 	}
 
-	/*public void sendMessages() throws IOException{
-		if(clientGui.getBoard().getkeycode.... != null) {
-			out.println(clientGui.getBoard().getkeycode...);
+	public void sendMessages() throws IOException{
+		String direction = clientGui.getBoard().getDirection();
+		if (direction != null) {
+			out.println(direction);
+			//clientGui.getBoard().clearDirection(); //para fazer a movientaçã de uma em uma é só descomentar
 		}
-		//usar o keyevent ou keycode
-	}*/
+	}
 
 	public void receiveMessages() throws IOException, ClassNotFoundException {
 		System.out.println("Recebi objeto");
@@ -81,7 +82,7 @@ public class Client {
 
 			while (true) {
 				receiveMessages();
-				//sendMessages();
+				sendMessages();
 			}
 		}catch (IOException | ClassNotFoundException e) { // ERRO
 			e.printStackTrace();

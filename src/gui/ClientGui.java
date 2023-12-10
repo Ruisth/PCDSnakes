@@ -105,7 +105,7 @@ public class ClientGui implements Observer {
         boardGui.repaint();
     }
 
-    public Board getBoard() {
+    public RemoteBoard getBoard() {
         return board;
     }
 
