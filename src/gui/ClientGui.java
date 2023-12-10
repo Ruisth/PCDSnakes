@@ -29,9 +29,9 @@ public class ClientGui implements Observer {
     public static final int NUM_ROWS = 30;
     private JFrame frame;
     private BoardComponent boardGui;
-    private Board board;
+    private RemoteBoard board;
 
-    public ClientGui(Board board, int x,int y) {
+    public ClientGui(RemoteBoard board, int x,int y) {
         super();
         this.board=board;
         frame= new JFrame("The Snake Game: Remote");
@@ -113,7 +113,7 @@ public class ClientGui implements Observer {
         return boardGui;
     }
 
-    public void setBoard(Board board) {
+    public void setBoard(RemoteBoard board) {
         this.board = board;
     }
 }

@@ -67,6 +67,5 @@ public class GameStatus implements Serializable {
         this.obstacles = obstacles;
         this.goalPosition = goalPosition;
         board.setChanged();
-
     }
 }

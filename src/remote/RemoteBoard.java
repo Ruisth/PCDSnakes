@@ -19,13 +19,19 @@ import environment.Cell;
 
 public class RemoteBoard extends Board implements Serializable {
 
+	int keyCode;
 	public RemoteBoard(){
 	}
 
 
+	public int getKeyCode() {
+		return keyCode;
+	}
+
 	@Override
 	public void handleKeyPress(int keyCode) {
 		//TODO
+		this.keyCode = keyCode;
 	}
 
 	@Override
@@ -36,13 +42,13 @@ public class RemoteBoard extends Board implements Serializable {
 	@Override
 	public void init() {
 		//TODO
-		snakes.clear();
+		/*snakes.clear();
 		for (Snake snake : snakes) {
 			HumanSnake humanSnake = new HumanSnake(snake.getIdentification(), this);
 			snakes.add(snake);
 		}
 
 		setChanged();
-		notifyObservers();
+		notifyObservers();*/
 	}
 }

@@ -44,9 +44,12 @@ public class Client {
 
 	}
 
-	public void sendMessages() throws IOException{
-			//usar o keyevent ou keycode
-	}
+	/*public void sendMessages() throws IOException{
+		if(clientGui.getBoard().getkeycode.... != null) {
+			out.println(clientGui.getBoard().getkeycode...);
+		}
+		//usar o keyevent ou keycode
+	}*/
 
 	public void receiveMessages() throws IOException, ClassNotFoundException {
 		System.out.println("Recebi objeto");

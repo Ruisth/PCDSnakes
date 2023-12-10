@@ -15,7 +15,7 @@ import static environment.BoardPosition.isValid;
 
 public class AutomaticSnake extends Snake {
 
-	private boolean state = false;
+	private boolean state;
 
 
 	public AutomaticSnake(int id, LocalBoard board) {

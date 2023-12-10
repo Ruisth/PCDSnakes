@@ -32,8 +32,13 @@ public class Server {
         public void run() {
             try {
                 while (true) {
-                    Board board = snakeGui.getBoard();
                     Socket socket = serverSocket.accept();
+
+                    HumanSnake snake = new HumanSnake(snakeGui.getBoard().getNumberSnakes(),snakeGui.getBoard());
+                    snakeGui.getBoard().addSnake(snake);
+                    snake.start();
+
+                    System.out.println(snake.getIdentification() + "" + snake.isHumanSnake() + "" + snake.getCells());
 
                     GereCliente gc = new GereCliente(socket, this.snakeGui);
                     gc.start();
@@ -101,11 +106,15 @@ public class Server {
             Thread sendStatus = new EnviaStatusThread();
             sendStatus.start();
 
-                /*while (!snakeGui.getBoard().isFinished()){
-                    recebeDirecao();
-                */
+                while (!snakeGui.getBoard().isFinished()) {
+                    try {
+                        recebeDirecao();
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            //sendStatus.interrupt();
+            sendStatus.interrupt();
         }
 
         public void fazConexao() throws IOException {
@@ -113,9 +122,10 @@ public class Server {
             out = new ObjectOutputStream(socket.getOutputStream());
         }
 
-        /*public void recebeDirecao() throws IOException, InterruptedException{
-
-        }*/
+        public void recebeDirecao() throws IOException, InterruptedException{
+            int direction = Integer.parseInt(in.readLine());
+            snakeGui.getBoard().getHumanSnake().moveHuman(direction);
+        }
     }
 
     public void startServing() throws IOException, InterruptedException {
