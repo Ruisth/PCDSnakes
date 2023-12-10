@@ -46,28 +46,36 @@ public class HumanSnake extends Snake {
 		 switch (direction) {
 			 case "UP":
 				 try {
-					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellAbove()));
+					 if(getBoard().getCell(getCells().getFirst().getPosition().getCellAbove()) != null) {
+						 move(getBoard().getCell(getCells().getFirst().getPosition().getCellAbove()));
+					 }
 				 } catch (InterruptedException e) {
 					 throw new RuntimeException(e);
 				 }
 				 break;
 			 case "DOWN":
 				 try {
-					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellBelow()));
+					 if(getBoard().getCell(getCells().getFirst().getPosition().getCellBelow()) != null) {
+						 move(getBoard().getCell(getCells().getFirst().getPosition().getCellBelow()));
+					 }
 				 } catch (InterruptedException e) {
 					 throw new RuntimeException(e);
 				 }
 				 break;
 			 case "LEFT":
 				 try {
-					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellLeft()));
+					 if(getBoard().getCell(getCells().getFirst().getPosition().getCellLeft()) != null) {
+						 move(getBoard().getCell(getCells().getFirst().getPosition().getCellLeft()));
+					 }
 				 } catch (InterruptedException e) {
 					 throw new RuntimeException(e);
 				 }
 				 break;
 			 case "RIGHT":
 				 try {
-					 move(getBoard().getCell(getCells().getFirst().getPosition().getCellRight()));
+					 if(getBoard().getCell(getCells().getFirst().getPosition().getCellRight()) != null) {
+						 move(getBoard().getCell(getCells().getFirst().getPosition().getCellRight()));
+					 }
 				 } catch (InterruptedException e) {
 					 throw new RuntimeException(e);
 				 }

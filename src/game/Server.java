@@ -68,7 +68,7 @@ public class Server {
                 while (!snakeGui.getBoard().isFinished()) {
                      try {
                         sendStatus();
-                        sleep(Board.REMOTE_REFRESH_INTERVAL);
+                        sleep(100);
                     } catch (InterruptedException | IOException e) {
                          e.printStackTrace();
                         return;
