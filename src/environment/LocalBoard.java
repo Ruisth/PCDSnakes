@@ -31,6 +31,7 @@ public class LocalBoard extends Board implements Serializable{
 			snakes.add(snake);
 		}
 
+
 		addObstacles(NUM_OBSTACLES);
 
 		Goal goal=addGoal();

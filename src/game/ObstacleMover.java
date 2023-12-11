@@ -18,9 +18,7 @@ public class ObstacleMover extends Thread {
 
 	@Override
 	public void run() {
-		// TODO
 		try {
-			/*for (Obstacle obs : board.getObstacles()) {*/
 				while (obstacle.getRemainingMoves() > 0) {
 					sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
 					obstacle.move();

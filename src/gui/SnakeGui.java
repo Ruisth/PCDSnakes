@@ -105,10 +105,6 @@ public class SnakeGui implements Observer {
 		frame.setVisible(true);
 		board.addObserver(this);
 		board.init();
-
-		for(Obstacle obs: board.getObstacles()) {
-			obs.toString();
-		}
 	}
 
 	@Override

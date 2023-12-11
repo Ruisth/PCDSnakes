@@ -89,7 +89,7 @@ public abstract class Board extends Observable {
 
 	public Goal addGoal() {
 		Goal goal=new Goal(this);
-		addGameElement( goal);
+		addGameElement(goal);
 		return goal;
 	}
 
