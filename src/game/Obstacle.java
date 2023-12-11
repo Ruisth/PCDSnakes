@@ -39,10 +39,11 @@ public class Obstacle extends GameElement implements Serializable {
 
 	public void move() throws InterruptedException {
 
+
+
 		this.getObsCell().removeObstacle();
 		this.setPosition(board.getRandomPosition());
 		remainingMoves--;
-
 	}
 
 	private void setPosition(BoardPosition newPosition) {

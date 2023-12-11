@@ -96,6 +96,7 @@ public class Cell implements Serializable {
 		try{
 			lock.lock();
 			gameElement = null;
+			lockCondition.signalAll();
 			return null;
 		}finally {
 			lock.unlock();
@@ -107,9 +108,9 @@ public class Cell implements Serializable {
 	//TODO
 		try{
 			lock.lock();
-				gameElement = null;
+			gameElement = null;
+			lockCondition.signalAll();
 			System.err.println("REMOVI : " + getGameElement());
-
 		}finally {
 			lock.unlock();
 		}

@@ -37,7 +37,7 @@ public class Client {
 
 	public void connectToServer() throws IOException{
 		endereco = InetAddress.getByName("localhost");
-		socket = new Socket(endereco, Server.PORTO);
+		socket = new Socket(endereco, PORTO);
 		System.err.println("Socket : " + socket);
 		in = new ObjectInputStream(socket.getInputStream());
 		out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);

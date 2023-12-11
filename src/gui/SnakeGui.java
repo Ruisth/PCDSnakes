@@ -19,6 +19,7 @@ import environment.BoardPosition;
 import environment.Cell;
 import environment.LocalBoard;
 import game.AutomaticSnake;
+import game.Obstacle;
 import game.Snake;
 
 /**
@@ -104,6 +105,10 @@ public class SnakeGui implements Observer {
 		frame.setVisible(true);
 		board.addObserver(this);
 		board.init();
+
+		for(Obstacle obs: board.getObstacles()) {
+			obs.toString();
+		}
 	}
 
 	@Override

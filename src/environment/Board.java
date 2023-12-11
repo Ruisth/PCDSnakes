@@ -98,7 +98,7 @@ public abstract class Board extends Observable {
 		getObstacles().clear();
 		while(numberObstacles>0) {
 			Obstacle obs=new Obstacle(this);
-			addGameElement( obs);
+			addGameElement(obs);
 			getObstacles().add(obs);
 			//ObstacleMover mover = new ObstacleMover(obs, (LocalBoard) this);
 			//mover.start();
