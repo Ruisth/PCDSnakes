@@ -10,6 +10,7 @@ import coordination.FinishCountDownLatch;
 
 public abstract class Board extends Observable {
 	protected Cell[][] cells;
+	protected Board board;
 	private BoardPosition goalPosition;
 	public static final long PLAYER_PLAY_INTERVAL = 100;
 	public static final long REMOTE_REFRESH_INTERVAL = 200;
@@ -17,11 +18,9 @@ public abstract class Board extends Observable {
 	public static final int NUM_ROWS = 30;
 	protected LinkedList<Snake> snakes = new LinkedList<Snake>();
 	protected LinkedList<Obstacle> obstacles= new LinkedList<Obstacle>();
-
 	public boolean isFinished() {
 		return isFinished;
 	}
-
 	protected boolean isFinished = false;
 	public static FinishCountDownLatch countDownLatch = new FinishCountDownLatch(Goal.MAX_VALUE);
 
@@ -32,32 +31,13 @@ public abstract class Board extends Observable {
 				cells[x][y] = new Cell(new BoardPosition(x, y));
 			}
 		}
-		// Inicia a thread que espera que o jogo acabe e interrompe todos os players
-		Thread endGame =  new Thread() {
-			@Override
-			public void run() {
-				try {
-					countDownLatch.await();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//Matar threads e terminar jogo
-				for (Snake snake : snakes) {
-					snake.interrupt();
-					stopSnakes();
-					System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				}
+	}
 
-				isFinished = true;
-				//O que fazer quando acabar
-				System.err.println("GAME FINISHED!");
-			}
-		};
-		endGame.start();
-		//TODO Debug morte
-		//Server server = new Server(this);
-		//server.start();
-
+	public Cell[][] getCells() {
+		return cells;
+	}
+	public void setCells(Cell[][] cells) {
+		this.cells = cells;
 	}
 
 	public Cell getCell(BoardPosition cellCoord) {
@@ -72,6 +52,17 @@ public abstract class Board extends Observable {
 		return goalPosition;
 	}
 
+	public void setObstaclePosition(BoardPosition obstaclePosition){
+		Obstacle o = getObstacle(obstaclePosition);
+		o.setX(obstaclePosition.getX());
+		o.setY(obstaclePosition.getY());
+	}
+
+	public Obstacle getObstacle(BoardPosition p) {
+		Cell newCell = getCell(p);
+		return (Obstacle) newCell.getGameElement();
+	}
+
 	public void setGoalPosition(BoardPosition goalPosition) {
 		this.goalPosition = goalPosition;
 	}
@@ -82,6 +73,9 @@ public abstract class Board extends Observable {
 			BoardPosition pos=getRandomPosition();
 			if(!getCell(pos).isOcupied() && !getCell(pos).isOcupiedByGoal()) {
 				getCell(pos).setGameElement(gameElement);
+				if (gameElement instanceof Obstacle){
+					setObstaclePosition(pos);
+				}
 				if(gameElement instanceof Goal) {
 					setGoalPosition(pos);
 					System.out.println("Goal placed at:"+pos);
@@ -109,7 +103,7 @@ public abstract class Board extends Observable {
 
 	public Goal addGoal() {
 		Goal goal=new Goal(this);
-		addGameElement( goal);
+		addGameElement(goal);
 		return goal;
 	}
 
@@ -118,12 +112,14 @@ public abstract class Board extends Observable {
 		getObstacles().clear();
 		while(numberObstacles>0) {
 			Obstacle obs=new Obstacle(this);
-			addGameElement( obs);
+			addGameElement(obs);
 			getObstacles().add(obs);
-			//ObstacleMover mover = new ObstacleMover(obs, (LocalBoard) this);
-			//mover.start();
 			numberObstacles--;
 		}
+	}
+
+	public void setObstacles(LinkedList<Obstacle> obstacles) {
+		this.obstacles = obstacles;
 	}
 
 	public LinkedList<Snake> getSnakes() {
@@ -151,6 +147,7 @@ public abstract class Board extends Observable {
 
 	public void addSnake(Snake snake) {
 		snakes.add(snake);
+		setChanged();
 	}
 
 	public void setSnakes(LinkedList<Snake> snakes) {
@@ -162,9 +159,10 @@ public abstract class Board extends Observable {
 		getCell(getGoalPosition()).getGoal().setValue(value);
 	}
 
-	private void stopSnakes() {
+	public void stopSnakes() {
 		for (Snake s : snakes) {
 			s.interrupt();
+			System.out.println("COBRAS PARADAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		}
 	}
 
@@ -172,4 +170,20 @@ public abstract class Board extends Observable {
 		return snakes.size();
 	}
 
+	public Board getBoard() {
+		return this;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public HumanSnake getHumanSnake() {
+		for (Snake snake: getSnakes()) {
+			if (snake.isHumanSnake()) {
+				return (HumanSnake) snake;
+			}
+		}
+        return null;
+    }
 }

@@ -18,12 +18,16 @@ public class ObstacleMover extends Thread {
 
 	@Override
 	public void run() {
-		// TODO
 		try {
-			/*for (Obstacle obs : board.getObstacles()) {*/
 				while (obstacle.getRemainingMoves() > 0) {
+					int moves = obstacle.getRemainingMoves();
+					board.getCell(obstacle.getPosition()).removeObstacle();
+					//board.getObstacles().remove();
+					moves--;
+					obstacle.setRemainingMoves(moves);
+					board.addGameElement(obstacle);
+					board.setChanged();
 					sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
-					obstacle.move();
 				}
 
 				// Aguarda o próximo intervalo

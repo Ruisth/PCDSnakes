@@ -26,8 +26,7 @@ import javax.swing.JComponent;
   *
   */
 public class BoardComponent extends JComponent implements KeyListener{
-
-	private Board board;
+	 private Board board;
 	private Image obstacleImage;
 
 	public BoardComponent(Board board) {
@@ -87,7 +86,7 @@ public class BoardComponent extends JComponent implements KeyListener{
 					(int)Math.round(LocalBoard.NUM_ROWS*CELL_WIDTH));
 		}
 		for (int y = 1; y < LocalBoard.NUM_ROWS; y++) {
-			g.drawLine(0, (int)Math.round(y * CELL_WIDTH), (int)Math.round(LocalBoard.NUM_COLUMNS*CELL_WIDTH), 
+			g.drawLine(0, (int)Math.round(y * CELL_WIDTH), (int)Math.round(LocalBoard.NUM_COLUMNS*CELL_WIDTH),
 					(int)Math.round(y* CELL_WIDTH));
 		}
 		for (Snake s : board.getSnakes()) {
@@ -120,8 +119,6 @@ public class BoardComponent extends JComponent implements KeyListener{
 				e.getKeyCode()!=KeyEvent.VK_UP && e.getKeyCode()!=KeyEvent.VK_DOWN ) 
 			return; // ignore
 		board.handleKeyPress(e.getKeyCode());
-		
-		
 	}
 
 	@Override
@@ -138,5 +135,8 @@ public class BoardComponent extends JComponent implements KeyListener{
 	public void keyTyped(KeyEvent arg0) {
 		// ignore
 	}
-	
-}
+
+	 public void setBoard(Board board) {
+		this.board = board;
+	 }
+ }

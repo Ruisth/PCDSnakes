@@ -2,89 +2,108 @@ package remote;
 
 
 import environment.Board;
+import environment.LocalBoard;
+import game.HumanSnake;
 import game.Server;
 import game.Snake;
-import gui.SnakeGui;
+import gui.ClientGui;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.net.UnknownHostException;
+import java.sql.SQLOutput;
 
 /** Remore client, only for part II
- * 
+ *
  * @author luismota
  *
  */
 
 public class Client {
-
-	private ObjectInputStream input;
-	private PrintWriter output;
+	private InetAddress endereco;
+	private ObjectInputStream in;
+	private PrintWriter out;
 	private Socket socket;
-	private RemoteBoard snakeGui;
+	private final int PORTO;
+	private ClientGui clientGui;
+	private String lastDirection;
 
-	public Client(String nickName) {
-		this.snakeGui = new RemoteBoard(nickName);
+	public Client(InetAddress endereco, int PORTO){
+		super();
+		this.endereco = endereco;
+		this.PORTO = PORTO;
 	}
 
-	public void runClient(String address, int port) {
-		try {
-			snakeGui.init();
-			connect(address, port);
+	public void connectToServer() throws IOException{
+		endereco = InetAddress.getByName("localhost");
+		socket = new Socket(endereco, PORTO);
+		System.err.println("Socket : " + socket);
+		in = new ObjectInputStream(socket.getInputStream());
+		out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
+
+	}
+
+	public void sendMessages() throws IOException{
+		String direction = clientGui.getBoard().getDirection();
+		if (direction != null) {
+			out.println(direction);
+			//clientGui.getBoard().clearDirection(); //para fazer a movientaçã de uma em uma é só descomentar
+		}
+	}
+
+	public void receiveMessages() throws IOException, ClassNotFoundException {
+		System.out.println("Recebi objeto");
+		//Board boardteste = (Board) in.readObject();
+		//System.out.println("board: " + boardteste.toString());
+		//clientGui.getBoardGui().setBoard(boardteste);
+
+		GameStatus gs = (GameStatus) in.readObject();
+
+			clientGui.getBoard().setBoard(gs.getBoard());
+			clientGui.getBoard().setCells(gs.getCells());
+			clientGui.getBoard().setSnakes(gs.getSnakes());
+			clientGui.getBoard().setObstacles(gs.getObstacles());
+			clientGui.getBoard().setGoalPosition(gs.getGoalPosition());
+			Board tempboard = clientGui.getBoard();
+			System.out.println("Fiz setChanged");
+			clientGui.getBoard().setChanged();
+	}
+
+
+	public void runClient(){
+		RemoteBoard board = new RemoteBoard();
+		clientGui = new ClientGui(board, 600, 0);
+		clientGui.init();
+
+		try{
+			connectToServer();
+			System.out.println("Conectei");
+
 			while (true) {
-				receive();
-				send();
+				receiveMessages();
+				sendMessages();
 			}
-		} catch (IOException e) {
+		}catch (IOException | ClassNotFoundException e) { // ERRO
 			e.printStackTrace();
-		}catch (ClassNotFoundException | ClassCastException e2){
-			return;
-        } finally {
-			try {
-				if (socket != null) {
-					socket.close();
-				}
-			} catch (IOException e) {
+        } finally { // a fechar
+			try{
+				socket.close();
+			} catch (IOException e){ // ERRO
 				e.printStackTrace();
 			}
 		}
-    }
-
-	void send() throws IOException {
-		String directionPressed = snakeGui.getPressedDirection();
-		if (directionPressed != null) {
-			output.println(directionPressed);
-		}
 	}
 
-	void receive() throws IOException, ClassNotFoundException {
-		LinkedList<Snake> read = (LinkedList<Snake>) input.readObject();
-		snakeGui.getBoard().setSnakes(read);
-	}
 
-	void connect(String address, int port) throws IOException {
-		if (address == "") {
-			InetAddress adr = InetAddress.getByName(null);
-			socket = new Socket(adr, Server.PORT);
-		} else {
-			socket = new Socket(address, port);
-		}
-		input = new ObjectInputStream(socket.getInputStream());
-		output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-	}
 
 	public static void main(String[] args) {
-		String serverAddress = "localhost";
-		int serverPort = 25565;
-
-		new Client("Player 1").runClient(serverAddress,serverPort);
+		try{
+			new Client(InetAddress.getByName("localHost"), 8085).runClient();
+		}catch (IOException e){
+			e.printStackTrace();
+			return;
+		}
 	}
 
 }

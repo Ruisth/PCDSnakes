@@ -19,6 +19,7 @@ import environment.BoardPosition;
 import environment.Cell;
 import environment.LocalBoard;
 import game.AutomaticSnake;
+import game.Obstacle;
 import game.Snake;
 
 /**
@@ -42,17 +43,6 @@ public class SnakeGui implements Observer {
 		this.board=board;
 		frame= new JFrame("The Snake Game: "+(board instanceof LocalBoard?"Local":"Remote"));
 		frame.setLocation(x, y);
-		buildGui();
-	}
-
-	public SnakeGui(String nickName) {
-		super();
-		frame = new JFrame(nickName);
-		buildGui();
-	}
-
-	public SnakeGui() {
-		super();
 		buildGui();
 	}
 

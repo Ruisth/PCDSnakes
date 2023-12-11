@@ -3,116 +3,191 @@ package game;
 import environment.Board;
 import environment.LocalBoard;
 import gui.SnakeGui;
+import remote.GameStatus;
+import remote.RemoteBoard;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-
-import static gui.SnakeGui.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Server {
-    public class Connection extends Thread {
-        private ServerSocket ss;
-        public SnakeGui gui;
-        private ArrayList<DealWithClient> dwcT;
+    public static final int PORTO = 8085;
 
-        public Connection(ServerSocket ss, SnakeGui gui) {
-            this.ss = ss;
-            this.gui = gui;
-            dwcT = new ArrayList<>();
+    public class AceitaConexaoThread extends Thread {
+        private ServerSocket serverSocket;
+        private SnakeGui snakeGui;
+        private ArrayList<GereCliente> gcThread;
+
+        public AceitaConexaoThread(ServerSocket serverSocket, SnakeGui snakeGui) {
+            this.serverSocket = serverSocket;
+            this.snakeGui = snakeGui;
+            gcThread = new ArrayList<>();
         }
 
         public void run() {
             try {
                 while (true) {
-                    Board board = gui.getBoard();
-                    Socket socket = ss.accept();
+                    Socket socket = serverSocket.accept();
 
-                    HumanSnake hSnake = new HumanSnake(board.getNumberSnakes(),board);
-                    board.addSnake(hSnake);
+                    HumanSnake snake = new HumanSnake(snakeGui.getBoard().getNumberSnakes(),snakeGui.getBoard());
+                    snakeGui.getBoard().addSnake(snake);
+                    snake.start();
 
-                    DealWithClient dwc = new DealWithClient(socket, this.gui, hSnake);
-                    dwc.start();
-                    dwcT.add(dwc);
+                    System.out.println(snake.getIdentification() + "" + snake.isHumanSnake() + "" + snake.getCells());
+
+                    GereCliente gc = new GereCliente(socket, this.snakeGui, snake);
+                    gc.start();
+                    gcThread.add(gc);
+
+                    System.out.println("AceitaConexao -- GereCliente");
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                System.out.println("AceitaConexao -- CATCH EXCEPTION");
+                return;
+            } finally {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
-
     }
 
-    public class DealWithClient extends Thread {
+    public class GereCliente extends Thread {
+        private BufferedReader in;
+        private ObjectOutputStream out;
+        private Socket socket;
+        private SnakeGui snakeGui;
+        private GameStatus gameStatus;
+        private HumanSnake humanSnake;
 
-        public class SendSnakeStatusThread extends Thread {
+
+        public class EnviaStatusThread extends Thread {
             public void run() {
-                while (!gui.getBoard().isFinished()) {
-                    try {
-                        send();
-                        sleep(Board.REMOTE_REFRESH_INTERVAL);
+                while (!snakeGui.getBoard().isFinished()) {
+                     try {
+                        sendStatus();
+                        sleep(100);
                     } catch (InterruptedException | IOException e) {
-                       e.printStackTrace();
-                       return;
+                         e.printStackTrace();
+                        return;
                     }
                 }
 
                 try {
-                    send();
-                    output.writeObject("FIM");
+                    sendStatus();
+                    out.writeObject("FIM do JOGO");
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;
+                }finally {
+                    closeConnection();
                 }
             }
 
-            private void send() throws IOException {
-                LinkedList<Snake> snakeStatus = new LinkedList<Snake>();
+            private void sendStatus() throws IOException {
+                Board temp = snakeGui.getBoard();
+                gameStatus = new GameStatus(temp.getBoard(), temp.getCells(),temp.getSnakes(),temp.getObstacles(),temp.getGoalPosition());
+                //System.out.println("board: " + snakeGui.getBoard().toString());
+                //Board boardteste = snakeGui.getBoard();
+                out.writeObject(gameStatus);
+                Board tempboard = snakeGui.getBoard();
+                System.out.println(tempboard);
+                out.reset();
+            }
 
-                for (Snake s : gui.getBoard().getSnakes()) {
-                    if (s.getCells() != null)
-                        snakeStatus.add(s);
+            private void closeConnection() {
+
+            /*
+            Varios try catches de modo a que caso de erro a fechar um ainda fecha os outros
+             */
+                try{
+                    in.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                try{
+                    out.close();
+                }catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                try{
+                    socket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
-        private BufferedReader input;
-        private ObjectOutputStream output;
-        private Socket socket;
 
-        private SnakeGui gui;
-
-        public DealWithClient(Socket socket, SnakeGui gui, HumanSnake hSnake) {
+        public GereCliente(Socket socket, SnakeGui snakeGui, HumanSnake humanSnake) throws IOException {
+            this.socket = socket;
+            this.snakeGui = snakeGui;
+            this.humanSnake = humanSnake;
+            fazConexao();
         }
 
-        void doConnections() throws IOException {
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new ObjectOutputStream(socket.getOutputStream());
+        @Override
+        public void run() {
+            Thread sendStatus = new EnviaStatusThread();
+            sendStatus.start();
+
+                while (!snakeGui.getBoard().isFinished()) {
+                    try {
+                        recebeDirecao();
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            sendStatus.interrupt();
         }
-    }
 
-    public static final int PORT = 25565;
+        public void fazConexao() throws IOException {
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new ObjectOutputStream(socket.getOutputStream());
+        }
 
-    public static void main(String[] args) {
-        try {
-            new Server().startServing();
-        }catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        public void recebeDirecao() throws IOException, InterruptedException{
+            String direction = in.readLine();
+            humanSnake.moveHuman(direction);
         }
     }
 
     public void startServing() throws IOException, InterruptedException {
-        ServerSocket socket = new ServerSocket(PORT);
-        LocalBoard localBoard = new LocalBoard();
-        SnakeGui snakeGui = new SnakeGui(localBoard,600,0);
+        ServerSocket serverSocket = new ServerSocket(PORTO);
+
+        LocalBoard board = new LocalBoard();
+        SnakeGui snakeGui = new SnakeGui(board, 600, 0);
         snakeGui.init();
 
         try {
+            AceitaConexaoThread aceita = new AceitaConexaoThread(serverSocket, snakeGui);
+            aceita.start();
+            Thread.sleep(10000);
+            board.endGame();
         } finally {
-            socket.close();
+            System.out.println("Socket fechou");
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            new Server().startServing();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return;
         }
     }
 }

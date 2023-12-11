@@ -5,9 +5,11 @@ import environment.BoardPosition;
 import environment.Cell;
 import environment.LocalBoard;
 
+import java.io.Serializable;
+
 import static environment.Board.countDownLatch;
 
-public class Goal extends GameElement  {
+public class Goal extends GameElement implements Serializable {
 	private int value;
 	private Board board;
 	public static final int MAX_VALUE=10;
