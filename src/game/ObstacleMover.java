@@ -20,8 +20,14 @@ public class ObstacleMover extends Thread {
 	public void run() {
 		try {
 				while (obstacle.getRemainingMoves() > 0) {
+					int moves = obstacle.getRemainingMoves();
+					board.getCell(obstacle.getPosition()).removeObstacle();
+					//board.getObstacles().remove();
+					moves--;
+					obstacle.setRemainingMoves(moves);
+					board.addGameElement(obstacle);
+					board.setChanged();
 					sleep(Obstacle.OBSTACLE_MOVE_INTERVAL);
-					obstacle.move();
 				}
 
 				// Aguarda o próximo intervalo

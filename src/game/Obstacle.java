@@ -32,9 +32,10 @@ public class Obstacle extends GameElement implements Serializable {
 	public int getRemainingMoves() {
 		return remainingMoves;
 	}
+	public void setRemainingMoves(int numMoves){ this.remainingMoves = numMoves; }
 
 
-	public void move() throws InterruptedException {
+	/*public void move() throws InterruptedException {
 
 		while (this.getRemainingMoves() > 0){
 			for(Cell[] cell1 : board.getCells()) {

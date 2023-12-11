@@ -50,6 +50,12 @@ public class Server {
                 e.printStackTrace();
                 System.out.println("AceitaConexao -- CATCH EXCEPTION");
                 return;
+            } finally {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -81,6 +87,8 @@ public class Server {
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;
+                }finally {
+                    closeConnection();
                 }
             }
 
@@ -93,6 +101,28 @@ public class Server {
                 Board tempboard = snakeGui.getBoard();
                 System.out.println(tempboard);
                 out.reset();
+            }
+
+            private void closeConnection() {
+
+            /*
+            Varios try catches de modo a que caso de erro a fechar um ainda fecha os outros
+             */
+                try{
+                    in.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                try{
+                    out.close();
+                }catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                try{
+                    socket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 

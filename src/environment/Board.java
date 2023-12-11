@@ -52,6 +52,17 @@ public abstract class Board extends Observable {
 		return goalPosition;
 	}
 
+	public void setObstaclePosition(BoardPosition obstaclePosition){
+		Obstacle o = getObstacle(obstaclePosition);
+		o.setX(obstaclePosition.getX());
+		o.setY(obstaclePosition.getY());
+	}
+
+	public Obstacle getObstacle(BoardPosition p) {
+		Cell newCell = getCell(p);
+		return (Obstacle) newCell.getGameElement();
+	}
+
 	public void setGoalPosition(BoardPosition goalPosition) {
 		this.goalPosition = goalPosition;
 	}
@@ -62,6 +73,9 @@ public abstract class Board extends Observable {
 			BoardPosition pos=getRandomPosition();
 			if(!getCell(pos).isOcupied() && !getCell(pos).isOcupiedByGoal()) {
 				getCell(pos).setGameElement(gameElement);
+				if (gameElement instanceof Obstacle){
+					setObstaclePosition(pos);
+				}
 				if(gameElement instanceof Goal) {
 					setGoalPosition(pos);
 					System.out.println("Goal placed at:"+pos);
@@ -100,8 +114,6 @@ public abstract class Board extends Observable {
 			Obstacle obs=new Obstacle(this);
 			addGameElement(obs);
 			getObstacles().add(obs);
-			//ObstacleMover mover = new ObstacleMover(obs, (LocalBoard) this);
-			//mover.start();
 			numberObstacles--;
 		}
 	}

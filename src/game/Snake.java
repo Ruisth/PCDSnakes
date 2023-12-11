@@ -72,7 +72,7 @@ public abstract class Snake extends Thread implements Serializable{
 			//Verificar se é goal e cresce a snake que come o goal
 			if (newCell.isEqual(new Cell(board.getGoalPosition()))) {
 				int value = newCell.getGoal().getValue();
-				if (value < 10) {
+				if (value <= 9) {
 					newCell.getGoal().captureGoal();
 					board.addGoal();
 					size += value;
@@ -80,6 +80,9 @@ public abstract class Snake extends Thread implements Serializable{
 
 					//size = getSize() + value;
 					System.err.println("Snake " + getIdentification() + " Current Size: " + size + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
+				}
+				if (value == 10) {
+					newCell.removeGoal();
 				}
 
 			}
